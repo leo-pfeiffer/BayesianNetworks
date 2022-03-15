@@ -11,7 +11,7 @@ public class CptTest {
         CPT table = node.getTable();
         assertSame(table.getNode(), node);
         assertEquals(table.getColumns().size(), 1);
-        assertArrayEquals(table.getColumns().get(0).getTruthValues().toArray(), new Integer[]{0, 1});
+        assertArrayEquals(table.getColumns().get(0).getTruthValues().toArray(), new Integer[]{1, 0});
     }
 
     @Test
@@ -23,8 +23,8 @@ public class CptTest {
         assertEquals(table.getColumns().size(), 2);
         assertEquals(table.getColumns().get(0).getNode(), node);
         assertEquals(table.getColumns().get(1).getNode(), node2);
-        assertArrayEquals(table.getColumns().get(0).getTruthValues().toArray(), new Integer[]{0, 1, 0, 1});
-        assertArrayEquals(table.getColumns().get(1).getTruthValues().toArray(), new Integer[]{0, 0, 1, 1});
+        assertArrayEquals(table.getColumns().get(0).getTruthValues().toArray(), new Integer[]{1, 0, 1, 0});
+        assertArrayEquals(table.getColumns().get(1).getTruthValues().toArray(), new Integer[]{1, 1, 0, 0});
     }
 
     @Test
