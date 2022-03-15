@@ -27,7 +27,7 @@ public class Node {
      * Domain of the node. For this implementation, the domain is always boolean
      * but this field was added to future-prove the implementation for a possible extension.
      * */
-    private final int[] domain = {0, 1};
+    private final int[] domain = {1, 0};
 
     /**
      * Conditional probability table for the node.
@@ -58,25 +58,33 @@ public class Node {
         return table;
     }
 
-    public void addChild(Node node) {
+    /**
+     * Add a child to the node.
+     * @param node Child node to add.
+     * */
+    protected void addChild(Node node) {
         if (!children.contains(node)) {
             children.add(node);
         }
     }
 
-    public void addParent(Node node) {
+    /**
+     * Add a parent to the node.
+     * @param node Parent node to add.
+     * */
+    protected void addParent(Node node) {
         if (!parents.contains(node)) {
             parents.add(node);
             table.addColumn(node);
         }
     }
 
-    public void removeChild(Node node) {
+    protected void removeChild(Node node) {
         // need to handle logic to remove the node from the CPT first
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 
-    public void removeParent(Node node) {
+    protected void removeParent(Node node) {
         // need to handle logic to remove the node from the CPT first
         throw new UnsupportedOperationException("Not implemented yet.");
     }

@@ -31,7 +31,7 @@ public class CptColumn {
      *
      * @param truthValues A list of truth values for the variables in the formula.
      */
-    public void setTruthValues(List<Integer> truthValues) {
+    protected void setTruthValues(List<Integer> truthValues) {
         this.truthValues.clear();
         this.truthValues.addAll(truthValues);
     }
@@ -41,7 +41,7 @@ public class CptColumn {
      *
      * @param truthValues An array of truth values for the variables in the formula.
      */
-    public void setTruthValues(int[] truthValues) {
+    protected void setTruthValues(int[] truthValues) {
         this.truthValues.clear();
         for (int i : truthValues) {
             this.truthValues.add(i);
@@ -62,7 +62,7 @@ public class CptColumn {
      * e.g. if n = 2, [1, 2, 3] -> [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]
      * @param n number of duplications
      * */
-    public void duplicate(int n) {
+    protected void duplicate(int n) {
         List<Integer> copy = new ArrayList<>(truthValues);
         for (int i = 0; i < n; i++) {
             truthValues.addAll(copy);

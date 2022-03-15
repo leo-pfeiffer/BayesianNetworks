@@ -1,6 +1,8 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
+import bayesiannetwork.BayesianNetwork;
+import bayesiannetwork.Node;
 
 /********************Starter Code
  *
@@ -25,7 +27,12 @@ public class A3main {
         switch (args[0]) {
             case "P1": {
                 //construct the network in args[1]
-                System.out.println("Network " + args[1]);
+                String network = args[1];
+                System.out.println("Network " + network);
+                BayesianNetwork bn = BayesianNetworkFactory.create(network);
+                for (Node n : bn.getNodes()) {
+                    System.out.println(bn.getNode(n.getLabel()).getTable());
+                }
                 //print the network
             }
             break;
@@ -77,7 +84,7 @@ public class A3main {
     private static ArrayList<String[]> getEvidence(Scanner sc) {
 
         System.out.println("Evidence:");
-        ArrayList<String[]> evidence = new ArrayList<String[]>();
+        ArrayList<String[]> evidence = new ArrayList<>();
         String[] line = sc.nextLine().split(" ");
 
         for (String st : line) {
@@ -91,8 +98,7 @@ public class A3main {
     private static String[] getOrder(Scanner sc) {
 
         System.out.println("Order:");
-        String[] val = sc.nextLine().split(",");
-        return val;
+        return sc.nextLine().split(",");
     }
 
 
@@ -100,9 +106,8 @@ public class A3main {
     private static String[] getQueriedNode(Scanner sc) {
 
         System.out.println("Query:");
-        String[] val = sc.nextLine().split(":");
 
-        return val;
+        return sc.nextLine().split(":");
 
     }
 

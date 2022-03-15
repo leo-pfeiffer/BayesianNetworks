@@ -38,6 +38,10 @@ public class CPT {
         return probabilities;
     }
 
+    /**
+     * Set the CPT values (probabilities).
+     * @param probabilities Probabilities. Must be the same size as the number of rows.
+     * */
     public void setProbabilities(double ...probabilities) {
         if (probabilities.length != this.getNumRows()) {
             throw new IllegalArgumentException("Number of probabilities does not match number of rows.");
@@ -48,6 +52,9 @@ public class CPT {
         }
     }
 
+    /**
+     * Return the number of rows in the table.
+     * */
     public int getNumRows() {
         if (columns.size() == 0) {
             return 0;
@@ -60,7 +67,10 @@ public class CPT {
         return currentSize;
     }
 
-    public void addColumn(Node node) {
+    /**
+     * Add a column to the CPT.
+     * */
+    protected void addColumn(Node node) {
         CptColumn newColumn = new CptColumn(node);
 
         if (columns.size() == 0) {
@@ -146,7 +156,9 @@ public class CPT {
         StringBuilder sb = new StringBuilder();
         sb.append("p(");
         sb.append(this.node.getLabel());
-        sb.append("|");
+        if (this.columns.size() > 1) {
+            sb.append("|");
+        }
         for (int i = 0; i < this.columns.size(); i++) {
             String var = this.columns.get(i).getNode().getLabel();
             if (!var.equals(this.node.getLabel())) {
