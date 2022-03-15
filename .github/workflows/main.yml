@@ -1,0 +1,28 @@
+# GitHub Actions workflow that builds the project and runs the JUnit tests
+
+name: Build and run JUnit tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Build the project using the make command defined in the Makefile
+      - name: Build
+        run: make compile
+
+      # Run the tests using the make command defined in the Makefile
+      - name: Test
+        run: make test
