@@ -68,4 +68,11 @@ public class CptColumn {
             truthValues.addAll(copy);
         }
     }
+
+    public CptColumn copy() {
+        CptColumn copy = new CptColumn(node);
+        List<Integer> copiedTruthValues = new ArrayList<>(this.truthValues);
+        copy.setTruthValues(copiedTruthValues);
+        return copy;
+    }
 }

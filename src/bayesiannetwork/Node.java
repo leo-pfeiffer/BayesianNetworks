@@ -79,6 +79,25 @@ public class Node {
         }
     }
 
+    public boolean hasAncestor(Node node) {
+        return hasAncestor(node.getLabel());
+    }
+
+    /**
+     * Depth first search to find if this node has the given node as an ancestor.
+     * */
+    public boolean hasAncestor(String label) {
+        if (parents.size() == 0) {
+            return false;
+        }
+        for (Node parent : parents) {
+            if (parent.getLabel().equals(label) || parent.hasAncestor(label)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected void removeChild(Node node) {
         // need to handle logic to remove the node from the CPT first
         throw new UnsupportedOperationException("Not implemented yet.");

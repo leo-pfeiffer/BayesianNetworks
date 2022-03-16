@@ -36,11 +36,45 @@ public class A3main {
 
             case "P2": {
                 //construct the network in args[1]
+                String network = args[1];
+                BayesianNetwork bn = BayesianNetworkFactory.create(network);
+
                 String[] query = getQueriedNode(sc);
                 String variable = query[0];
+
+                Node variableNode = bn.getNode(variable);
+                if (variableNode == null) {
+                    throw new IllegalArgumentException("Invalid node: " + variable);
+                }
+
                 String value = query[1];
-                String[] order = getOrder(sc);
+
+                int numericValue;
+                switch (value) {
+                    case "T":
+                        numericValue = 1;
+                        break;
+                    case "F":
+                        numericValue = 0;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid value: " + value);
+                }
+
+                String[] orderRaw = getOrder(sc);
+                Order order = new Order();
+                for (String n : orderRaw) {
+                    Node node = bn.getNode(n);
+                    if (node == null) {
+                        throw new IllegalArgumentException("Invalid node: " + n);
+                    }
+                    order.add(node);
+                }
+
                 // execute query of p(variable=value) with given order of elimination
+                VariableElimination ve = new VariableElimination(bn, variableNode, order, numericValue);
+
+                // double result = ve.getResult();
                 double result = 0.570501;
                 printResult(result);
             }

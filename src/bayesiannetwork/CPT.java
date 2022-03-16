@@ -38,6 +38,19 @@ public class CPT {
         return probabilities;
     }
 
+    public boolean containsNode(Node node) {
+        return containsNode(node.getLabel());
+    }
+
+    public boolean containsNode(String label) {
+        for (CptColumn column : columns) {
+            if (column.getNode().getLabel().equals(label)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Set the CPT values (probabilities).
      * @param probabilities Probabilities. Must be the same size as the number of rows.
@@ -100,6 +113,16 @@ public class CPT {
         }
         // add the column
         columns.add(newColumn);
+    }
+
+    public CPT copy() {
+        CPT copy = new CPT(this.node);
+        for (CptColumn column : columns) {
+            copy.columns.add(column.copy());
+        }
+        List<Double> newProbabilities = new ArrayList<>(probabilities);
+        copy.probabilities.addAll(newProbabilities);
+        return copy;
     }
 
     @Override
