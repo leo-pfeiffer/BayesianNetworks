@@ -30,10 +30,7 @@ public class A3main {
                 String network = args[1];
                 System.out.println("Network " + network);
                 BayesianNetwork bn = BayesianNetworkFactory.create(network);
-                for (Node n : bn.getNodes()) {
-                    System.out.println(bn.getNode(n.getLabel()).getTable());
-                }
-                //print the network
+                System.out.println(bn);
             }
             break;
 

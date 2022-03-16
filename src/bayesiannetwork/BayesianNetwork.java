@@ -136,4 +136,35 @@ public class BayesianNetwork {
         return nodeMap.containsKey(label);
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Nodes: ============================================ \n");
+        for (int i = 0; i < nodes.size(); i++) {
+            sb.append(nodes.get(i).getLabel());
+            if (i < nodes.size() - 1) {
+                sb.append(", ");
+            } else {
+                sb.append("\n");
+            }
+        }
+
+        sb.append("\n").append("Edges: ============================================ \n");
+
+        for (Node node : nodes) {
+            for (Node child : node.getChildren()) {
+                sb.append(node.getLabel()).append(" -> ").append(child.getLabel()).append("\n");
+            }
+        }
+
+        sb.append("\n").append("CPT: ============================================ \n");
+
+        for (Node node : nodes) {
+            sb.append(node.getTable()).append("\n");
+        }
+
+        return sb.toString();
+    }
 }
