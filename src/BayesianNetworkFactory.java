@@ -122,7 +122,47 @@ public abstract class BayesianNetworkFactory {
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createCNX() {
         BayesianNetwork bn = new BayesianNetwork();
-        // todo
+
+        // nodes
+        Node holiday = bn.addNode("Hol");
+        Node ddos = bn.addNode("D_R");
+        Node clientActivity = bn.addNode("C_A");
+        Node logged = bn.addNode("Log");
+        Node maintenance = bn.addNode("Mai");
+        Node maintenanceInfo = bn.addNode("M_I");
+        Node firewall = bn.addNode("Fir");
+        Node website = bn.addNode("Web");
+        Node blocked = bn.addNode("Blo");
+        Node alert = bn.addNode("Ale");
+
+        // edges
+        bn.addEdge(holiday, ddos);
+        bn.addEdge(clientActivity, logged);
+        bn.addEdge(maintenance, firewall);
+        bn.addEdge(maintenanceInfo, firewall);
+        bn.addEdge(website, blocked);
+        bn.addEdge(ddos, alert);
+        bn.addEdge(logged, alert);
+        bn.addEdge(firewall, alert);
+        bn.addEdge(blocked, alert);
+
+        // probabilities
+        holiday.getTable().setProbabilities(0.125, 0.875);
+        ddos.getTable().setProbabilities(0.15, 0.85, 0.05, 0.95);
+        clientActivity.getTable().setProbabilities(0.05, 0.95);
+        logged.getTable().setProbabilities(0.7, 0.3, 0.3, 0.7);
+        maintenance.getTable().setProbabilities(0.1, 0.9);
+        maintenanceInfo.getTable().setProbabilities(0.02, 0.98);
+        firewall.getTable().setProbabilities(0.5, 0.5, 0.03, 0.99, 0.5, 0.5, 0.97, 0.1);
+        website.getTable().setProbabilities(0.05, 0.95);
+        blocked.getTable().setProbabilities(0.85, 0.15, 0.05, 0.95);
+        alert.getTable().setProbabilities(
+                0.95, 0.7125, 0.7125, 0.475, 0.7125, 0.475, 0.475, 0.2375,
+                0.7125, 0.475, 0.475, 0.2375, 0.457, 0.2375, 0.2375, 0,
+                0.05, 0.2875, 0.2875, 0.525, 0.2875, 0.525, 0.525, 0.7625,
+                0.2875, 0.525, 0.525, 0.7625, 0.525, 0.7625, 0.7625, 1
+        );
+
         return bn;
     }
 
