@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CptTest.class,
-        NodeTest.class
+        NodeTest.class,
+        VariableEliminationTest.class
 })
 public class TestSuite { }

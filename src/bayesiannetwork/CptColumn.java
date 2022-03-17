@@ -1,7 +1,9 @@
 package bayesiannetwork;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a column for a variable in the CPT.

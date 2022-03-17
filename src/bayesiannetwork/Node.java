@@ -1,7 +1,9 @@
 package bayesiannetwork;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a node (or variable / event) in a Bayesian network.
@@ -62,7 +64,7 @@ public class Node {
      * Add a child to the node.
      * @param node Child node to add.
      * */
-    protected void addChild(Node node) {
+    public void addChild(Node node) {
         if (!children.contains(node)) {
             children.add(node);
         }
@@ -72,7 +74,7 @@ public class Node {
      * Add a parent to the node.
      * @param node Parent node to add.
      * */
-    protected void addParent(Node node) {
+    public void addParent(Node node) {
         if (!parents.contains(node)) {
             parents.add(node);
             table.addColumn(node);

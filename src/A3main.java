@@ -72,10 +72,10 @@ public class A3main {
                 }
 
                 // execute query of p(variable=value) with given order of elimination
-                VariableElimination ve = new VariableElimination(bn, variableNode, order, numericValue);
+                VariableElimination ve = new VariableElimination(bn);
 
-                // double result = ve.getResult();
-                double result = 0.570501;
+                double result = ve.getResult(variableNode, order, numericValue);
+                // double result = 0.570501;
                 printResult(result);
             }
             break;

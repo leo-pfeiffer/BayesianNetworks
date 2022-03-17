@@ -2,7 +2,11 @@ package bayesiannetwork;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CPT {
 
@@ -21,9 +25,24 @@ public class CPT {
      */
     private final List<Double> probabilities = new ArrayList<>();
 
+    /**
+     * Map to quickly find the row index of a given set of values.
+     * */
+    private final HashMap<CptRowKey, Integer> rowIndex = new HashMap<>();
+
+    /**
+     * Create table for a conditional probability for the given node.
+     * */
     public CPT(Node node) {
         this.node = node;
         this.addColumn(node);
+    }
+
+    /**
+     * Create table for an unconditional probability.
+     * */
+    public CPT() {
+        this.node = null;
     }
 
     public Node getNode() {
@@ -36,6 +55,18 @@ public class CPT {
 
     public List<Double> getProbabilities() {
         return probabilities;
+    }
+
+    public HashMap<CptRowKey, Integer> getRowIndex() {
+        return rowIndex;
+    }
+
+    public double getProbabilitiesByRowKey(CptRowKey key) {
+        return probabilities.get(rowIndex.get(key));
+    }
+
+    public double getProbabilitiesByRowIndex(int rowIndex) {
+        return probabilities.get(rowIndex);
     }
 
     public boolean containsNode(Node node) {
@@ -51,8 +82,42 @@ public class CPT {
         return false;
     }
 
+    public Node getNodeFromColumns(Node node) {
+        return getNodeFromColumns(node.getLabel());
+    }
+
+    public Node getNodeFromColumns(String label) {
+        for (CptColumn column : columns) {
+            if (column.getNode().getLabel().equals(label)) {
+                return column.getNode();
+            }
+        }
+        throw new IllegalArgumentException("Node not found in CPT.");
+    }
+
+    public CptRowKey getRowKeyForRow(int rowIndex) {
+        CptRowKey key = new CptRowKey();
+        for (CptColumn column : columns) {
+            key.put(column.getNode().getLabel(), column.getTruthValues().get(rowIndex));
+        }
+        return key;
+    }
+
     /**
-     * Set the CPT values (probabilities).
+     * Set the CPT values (probabilities) from a list.
+     * @param probabilities Probabilities. Must be the same size as the number of rows.
+     * */
+    public void setProbabilities(List<Double> probabilities) {
+        if (probabilities.size() != this.getNumRows()) {
+            throw new IllegalArgumentException("Number of probabilities does not match number of rows.");
+        }
+        this.probabilities.clear();
+        this.probabilities.addAll(probabilities);
+        createRowIndex();
+    }
+
+    /**
+     * Set the CPT values (probabilities) using varargs.
      * @param probabilities Probabilities. Must be the same size as the number of rows.
      * */
     public void setProbabilities(double ...probabilities) {
@@ -62,6 +127,26 @@ public class CPT {
         this.probabilities.clear();
         for (double p : probabilities) {
             this.probabilities.add(p);
+        }
+        createRowIndex();
+    }
+
+    public void createRowIndex() {
+        rowIndex.clear();
+
+        String[] labels = new String[columns.size()];
+        for (int i = 0; i < columns.size(); i++) {
+            labels[i] = columns.get(i).getNode().getLabel();
+        }
+
+        for (int i = 0; i < getNumRows(); i++) {
+            int[] truthValues = new int[columns.size()];
+            for (int j = 0; j < columns.size(); j++) {
+                truthValues[j] = columns.get(j).getTruthValues().get(i);
+            }
+
+            CptRowKey key = new CptRowKey(labels, truthValues);
+            rowIndex.put(key, i);
         }
     }
 
@@ -83,7 +168,7 @@ public class CPT {
     /**
      * Add a column to the CPT.
      * */
-    protected void addColumn(Node node) {
+    public void addColumn(Node node) {
         CptColumn newColumn = new CptColumn(node);
 
         if (columns.size() == 0) {
@@ -118,11 +203,30 @@ public class CPT {
     public CPT copy() {
         CPT copy = new CPT(this.node);
         for (CptColumn column : columns) {
-            copy.columns.add(column.copy());
+            if (!column.getNode().equals(node)) {
+                copy.addColumn(column.getNode());
+            }
         }
         List<Double> newProbabilities = new ArrayList<>(probabilities);
-        copy.probabilities.addAll(newProbabilities);
+        copy.setProbabilities(newProbabilities);
+
         return copy;
+    }
+
+    public Set<String> getNodeLabelSet() {
+        Set<String> labelSet = new HashSet<>();
+        for (CptColumn col: this.getColumns()) {
+            labelSet.add(col.getNode().getLabel());
+        }
+        return labelSet;
+    }
+
+    public Set<Node> getNodeSet() {
+        Set<Node> nodeSet = new HashSet<>();
+        for (CptColumn col: this.getColumns()) {
+            nodeSet.add(col.getNode());
+        }
+        return nodeSet;
     }
 
     @Override
@@ -130,7 +234,12 @@ public class CPT {
         // todo test
         if (columns.size() == 0) return "";
 
-        return "Variable: " + this.node.getLabel() + "\n\n" +
+        String firstLine = "";
+        if (this.node != null) {
+            firstLine = "Variable: " + this.node.getLabel() + "\n\n";
+        }
+
+        return firstLine +
                 tableHeaderString() + "\n" +
                 innerTableString();
     }
@@ -145,7 +254,7 @@ public class CPT {
             String v = column.getNode().getLabel();
             sb.append(v).append("\t");
         }
-        sb.append("|\t").append(condProbString());
+        sb.append("|\t").append(probabilityExpression());
         return sb.toString();
     }
 
@@ -172,19 +281,30 @@ public class CPT {
     }
 
     /**
-     * Create string for the conditional probability expression
-     * e.g. p(A|B)
+     * Create string for the probability expression
+     * e.g. p(A|B) or P(A,B)
      * */
-    private String condProbString() {
+    private String probabilityExpression() {
         StringBuilder sb = new StringBuilder();
         sb.append("p(");
-        sb.append(this.node.getLabel());
-        if (this.columns.size() > 1) {
-            sb.append("|");
+        if (this.node != null) {
+            sb.append(this.node.getLabel());
+            if (this.columns.size() > 1) {
+                sb.append("|");
+            }
         }
         for (int i = 0; i < this.columns.size(); i++) {
             String var = this.columns.get(i).getNode().getLabel();
-            if (!var.equals(this.node.getLabel())) {
+
+            // unconditional probability
+            if (this.node == null) {
+                sb.append(var);
+                if (i != this.columns.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            // conditional probability
+            else if (!var.equals(this.node.getLabel())) {
                 sb.append(var);
                 if (i != this.columns.size() - 1) {
                     sb.append(",");
