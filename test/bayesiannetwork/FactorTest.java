@@ -3,12 +3,12 @@ package bayesiannetwork;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class CptTest {
+public class FactorTest {
 
     @Test
     public void testCreateWithNode() {
         Node node = new Node("A");
-        CPT table = node.getTable();
+        Factor table = node.getTable();
         assertSame(table.getNode(), node);
         assertEquals(table.getColumns().size(), 1);
         assertArrayEquals(table.getColumns().get(0).getTruthValues().toArray(), new Integer[]{1, 0});
@@ -17,7 +17,7 @@ public class CptTest {
     @Test
     public void testAddColumn() {
         Node node = new Node("A");
-        CPT table = node.getTable();
+        Factor table = node.getTable();
         Node node2 = new Node("B");
         table.addColumn(node2);
         assertEquals(table.getColumns().size(), 2);
@@ -30,7 +30,7 @@ public class CptTest {
     @Test
     public void testSetProbabilitiesSingle() {
         Node node = new Node("A");
-        CPT table = node.getTable();
+        Factor table = node.getTable();
         table.setProbabilities(0.1, 0.9);
         assertArrayEquals(table.getProbabilities().toArray(), new Double[]{0.1, 0.9});
     }
@@ -38,7 +38,7 @@ public class CptTest {
     @Test
     public void testSetProbabilitiesDouble() {
         Node node = new Node("A");
-        CPT table = node.getTable();
+        Factor table = node.getTable();
         table.addColumn(new Node("B"));
         table.setProbabilities(0.1, 0.9, 0.2, 0.8);
         assertArrayEquals(table.getProbabilities().toArray(), new Double[]{0.1, 0.9, 0.2, 0.8});
@@ -47,7 +47,7 @@ public class CptTest {
     @Test
     public void testSetWrongNumberOfProbabilities() {
         Node node = new Node("A");
-        CPT table = node.getTable();
+        Factor table = node.getTable();
         table.addColumn(new Node("B"));
         assertThrows(IllegalArgumentException.class, () -> table.setProbabilities(0.1, 0.9, 0.2));
         assertThrows(IllegalArgumentException.class, () -> table.setProbabilities(0.1, 0.9, 0.2, 0.2, 0.3));
@@ -55,7 +55,7 @@ public class CptTest {
 
     @Test
     public void testCreateUnconditionalTable() {
-        CPT table = new CPT();
+        Factor table = new Factor();
         Node node1 = new Node("A");
         Node node2 = new Node("B");
         Node node3 = new Node("C");
@@ -72,7 +72,7 @@ public class CptTest {
     @Test
     public void testRowIndex() {
         Node node1 = new Node("A");
-        CPT table = node1.getTable();
+        Factor table = node1.getTable();
         Node node2 = new Node("B");
         Node node3 = new Node("C");
         table.addColumn(node2);
@@ -80,14 +80,14 @@ public class CptTest {
         table.setProbabilities(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8);
 
         String[] cols = new String[]{"A", "B", "C"};
-        CptRowKey key1 = new CptRowKey(cols, new int[]{1, 1, 1});
-        CptRowKey key2 = new CptRowKey(cols, new int[]{0, 1, 1});
-        CptRowKey key3 = new CptRowKey(cols, new int[]{1, 0, 1});
-        CptRowKey key4 = new CptRowKey(cols, new int[]{0, 0, 1});
-        CptRowKey key5 = new CptRowKey(cols, new int[]{1, 1, 0});
-        CptRowKey key6 = new CptRowKey(cols, new int[]{0, 1, 0});
-        CptRowKey key7 = new CptRowKey(cols, new int[]{1, 0, 0});
-        CptRowKey key8 = new CptRowKey(cols, new int[]{0, 0, 0});
+        FactorRowKey key1 = new FactorRowKey(cols, new int[]{1, 1, 1});
+        FactorRowKey key2 = new FactorRowKey(cols, new int[]{0, 1, 1});
+        FactorRowKey key3 = new FactorRowKey(cols, new int[]{1, 0, 1});
+        FactorRowKey key4 = new FactorRowKey(cols, new int[]{0, 0, 1});
+        FactorRowKey key5 = new FactorRowKey(cols, new int[]{1, 1, 0});
+        FactorRowKey key6 = new FactorRowKey(cols, new int[]{0, 1, 0});
+        FactorRowKey key7 = new FactorRowKey(cols, new int[]{1, 0, 0});
+        FactorRowKey key8 = new FactorRowKey(cols, new int[]{0, 0, 0});
 
         assertEquals(0.1, table.getProbabilitiesByRowKey(key1), 0.0);
         assertEquals(0.2, table.getProbabilitiesByRowKey(key2), 0.0);

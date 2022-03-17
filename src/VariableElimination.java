@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import bayesiannetwork.BayesianNetwork;
-import bayesiannetwork.CPT;
-import bayesiannetwork.CptColumn;
-import bayesiannetwork.CptRowKey;
+import bayesiannetwork.Factor;
+import bayesiannetwork.FactorColumn;
+import bayesiannetwork.FactorRowKey;
 import bayesiannetwork.Node;
 import utils.SetUtils;
 
@@ -30,13 +30,13 @@ public class VariableElimination {
      * */
     public Double getResult(Node node, Order order, int truthValue) {
         pruneOrder(order, node);
-        List<CPT> factors = createFactorList(order, node);
+        List<Factor> factors = createFactorList(order, node);
 
         for (Node n : order) {
             String y = n.getLabel();
-            List<CPT> toSumOut = createToSumOutList(factors, y);
+            List<Factor> toSumOut = createToSumOutList(factors, y);
             factors.removeAll(toSumOut);
-            CPT newFactor = joinMarginalize(toSumOut, y);
+            Factor newFactor = joinMarginalize(toSumOut, y);
             factors.add(newFactor);
         }
 
@@ -60,8 +60,8 @@ public class VariableElimination {
     /**
      * Create a list containing copies of the factors of all nodes of the network.
      * */
-    private List<CPT> createFactorList(Order order, Node node) {
-        List<CPT> factors = new ArrayList<>();
+    private List<Factor> createFactorList(Order order, Node node) {
+        List<Factor> factors = new ArrayList<>();
         for (Node n : this.network.getNodes()) {
             if (order.contains(n) || n.equals(node)) {
                 factors.add(n.getTable().copy());
@@ -73,10 +73,10 @@ public class VariableElimination {
     /**
      * Create the ToSumOut list containing all factors that contain the variable with the label.
      * */
-    private List<CPT> createToSumOutList(List<CPT> factors, String label) {
-        List<CPT> toSumOut = new ArrayList<>();
+    private List<Factor> createToSumOutList(List<Factor> factors, String label) {
+        List<Factor> toSumOut = new ArrayList<>();
 
-        for (CPT f : factors) {
+        for (Factor f : factors) {
             if (f.containsNode(label)) {
                 toSumOut.add(f);
             }
@@ -87,16 +87,16 @@ public class VariableElimination {
     /**
      * Create new factor with all variables in factors of toSumOut but without Y by eliminating Y.
      * */
-    protected CPT joinMarginalize(List<CPT> toSumOut, String y) {
-        CPT fResult = join(toSumOut);
+    protected Factor joinMarginalize(List<Factor> toSumOut, String y) {
+        Factor fResult = join(toSumOut);
         return marginalize(fResult, y);
     }
 
     /**
      * Join factors of toSumOut using the point wise product.
      * */
-    protected CPT join(List<CPT> toSumOut) {
-        CPT result = toSumOut.get(0);
+    protected Factor join(List<Factor> toSumOut) {
+        Factor result = toSumOut.get(0);
         for (int i = 1; i < toSumOut.size(); i++) {
             result = pointWiseProduct(result, toSumOut.get(i));
         }
@@ -106,7 +106,7 @@ public class VariableElimination {
     /**
      * Compute the point wise product of two factors.
      * */
-    protected CPT pointWiseProduct(CPT f1, CPT f2) {
+    protected Factor pointWiseProduct(Factor f1, Factor f2) {
 
         // variables both in f1 and f2
         Set<Node> v1 = SetUtils.intersection(f1.getNodeSet(), f2.getNodeSet());
@@ -120,7 +120,7 @@ public class VariableElimination {
         v3.removeAll(f1.getNodeSet());
 
         // create the raw resulting table
-        CPT result = new CPT();
+        Factor result = new Factor();
         for (Node n : v1) result.addColumn(n);
         for (Node n : v2) result.addColumn(n);
         for (Node n : v3) result.addColumn(n);
@@ -135,10 +135,10 @@ public class VariableElimination {
         for (int row = 0; row < result.getNumRows(); row++) {
 
             // keys to access the truth values of f1 and f2
-            CptRowKey leftKey = new CptRowKey();
-            CptRowKey rightKey = new CptRowKey();
+            FactorRowKey leftKey = new FactorRowKey();
+            FactorRowKey rightKey = new FactorRowKey();
 
-            for (CptColumn c : result.getColumns()) {
+            for (FactorColumn c : result.getColumns()) {
                 Node n = c.getNode();
 
                 // if the node is on the left side of the product
@@ -165,13 +165,13 @@ public class VariableElimination {
     /**
      * Marginalize the factor f by summing out variable y.
      * */
-    protected CPT marginalize(CPT f, String y) {
+    protected Factor marginalize(Factor f, String y) {
 
         // map the new row keys to the new truth values
-        HashMap<CptRowKey, Double> newTruthValues = this.createTruthValuesForMarginalization(f, y);
+        HashMap<FactorRowKey, Double> newTruthValues = this.createTruthValuesForMarginalization(f, y);
 
         // create the new table
-        CPT result = this.marginalizeCreateTable(f, y);
+        Factor result = this.marginalizeCreateTable(f, y);
 
         // put the truth values in the right order
         List<Double> truthValues = this.orderTruthValuesForFactor(result, newTruthValues);
@@ -187,39 +187,39 @@ public class VariableElimination {
      * Given the factor f and the variable y to marginalize,
      * group by the row keys of f (without column y) and sum the probabilities.
      * */
-    private HashMap<CptRowKey, Double> createTruthValuesForMarginalization(CPT f, String y) {
+    private HashMap<FactorRowKey, Double> createTruthValuesForMarginalization(Factor f, String y) {
 
         Node yNode = f.getNodeFromColumns(y);
 
         // rows already explored to prevent double counting
-        HashSet<CptRowKey> explored = new HashSet<>(f.getNumRows());
+        HashSet<FactorRowKey> explored = new HashSet<>(f.getNumRows());
 
         // map the new row keys to the new truth values
-        HashMap<CptRowKey, Double> newTruthValues = new HashMap<>(f.getNumRows()/2);
+        HashMap<FactorRowKey, Double> newTruthValues = new HashMap<>(f.getNumRows()/2);
 
         // sum out the variable y
         for (int row = 0; row < f.getNumRows(); row++) {
 
-            CptRowKey rowKey = f.getRowKeyForRow(row);
+            FactorRowKey rowKey = f.getRowKeyForRow(row);
             // already explored this row
             if (explored.contains(rowKey)) continue;
 
             // create a key for every domain value of y
-            ArrayList<CptRowKey> keys = new ArrayList<>(yNode.getDomain().length);
+            ArrayList<FactorRowKey> keys = new ArrayList<>(yNode.getDomain().length);
             for (int d : yNode.getDomain()) {
-                CptRowKey key = new CptRowKey(rowKey);
+                FactorRowKey key = new FactorRowKey(rowKey);
                 key.put(y, d);
                 keys.add(key);
             }
 
             // compute combined truth value of the keys
             double truthValue = 0;
-            for (CptRowKey key : keys) {
+            for (FactorRowKey key : keys) {
                 truthValue += f.getProbabilitiesByRowKey(key);
             }
 
             // add the truth value to the new table
-            CptRowKey newRowKey = new CptRowKey(rowKey);
+            FactorRowKey newRowKey = new FactorRowKey(rowKey);
             newRowKey.remove(y);
             newTruthValues.put(newRowKey, truthValue);
 
@@ -234,9 +234,9 @@ public class VariableElimination {
      * Create the new Factor table for the marginalization.
      * This simply creates a new factor from the old factor's columns minus the variable y.
      * */
-    private CPT marginalizeCreateTable(CPT f, String y) {
-        CPT result = new CPT();
-        for (CptColumn c : f.getColumns()) {
+    private Factor marginalizeCreateTable(Factor f, String y) {
+        Factor result = new Factor();
+        for (FactorColumn c : f.getColumns()) {
             if (!c.getNode().getLabel().equals(y)) {
                 result.addColumn(c.getNode());
             }
@@ -248,10 +248,10 @@ public class VariableElimination {
      * Given a factor and a map of row keys to truth values, create a list that contains the truth values
      * in the order in which they appear in the table.
      */
-    private List<Double> orderTruthValuesForFactor(CPT factor, HashMap<CptRowKey, Double> newTruthValues) {
+    private List<Double> orderTruthValuesForFactor(Factor factor, HashMap<FactorRowKey, Double> newTruthValues) {
         List<Double> truthValues = new ArrayList<>(factor.getNumRows());
         for (int row = 0; row < factor.getNumRows(); row++) {
-            CptRowKey key = factor.getRowKeyForRow(row);
+            FactorRowKey key = factor.getRowKeyForRow(row);
             truthValues.add(newTruthValues.get(key));
         }
         return truthValues;
@@ -260,9 +260,9 @@ public class VariableElimination {
     /**
      * Extract the result from factors = [f(node)], which is f(node) using the truth value.
      * */
-    private Double extract(List<CPT> factors, Node node, int truthValue) {
-        CPT f = factors.get(0);
-        CptRowKey key = new CptRowKey();
+    private Double extract(List<Factor> factors, Node node, int truthValue) {
+        Factor f = factors.get(0);
+        FactorRowKey key = new FactorRowKey();
         key.put(node.getLabel(), truthValue);
         return f.getProbabilitiesByRowKey(key);
     }

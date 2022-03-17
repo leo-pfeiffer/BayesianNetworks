@@ -5,19 +5,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class CptRowKey {
+public class FactorRowKey {
 
     // key: label
     // value: truth value
     private final Map<String, Integer> key = new HashMap<>();
 
-    public CptRowKey(){}
+    public FactorRowKey(){}
 
-    public CptRowKey(CptRowKey cptRowKey) {
-        key.putAll(cptRowKey.key);
+    public FactorRowKey(FactorRowKey factorRowKey) {
+        key.putAll(factorRowKey.key);
     }
 
-    public CptRowKey(List<String> labels, List<Integer> truthValues) {
+    public FactorRowKey(List<String> labels, List<Integer> truthValues) {
         if (labels.size() != truthValues.size()) {
             throw new IllegalArgumentException("labels and truthValues must have the same size");
         }
@@ -26,7 +26,7 @@ public class CptRowKey {
         }
     }
 
-    public CptRowKey(String[] labels, int[] truthValues) {
+    public FactorRowKey(String[] labels, int[] truthValues) {
         if (labels.length != truthValues.length) {
             throw new IllegalArgumentException("labels and truthValues must have the same size");
         }
@@ -47,8 +47,8 @@ public class CptRowKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CptRowKey cptRowKey = (CptRowKey) o;
-        return Objects.equals(key, cptRowKey.key);
+        FactorRowKey factorRowKey = (FactorRowKey) o;
+        return Objects.equals(key, factorRowKey.key);
     }
 
     @Override

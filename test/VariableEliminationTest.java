@@ -2,7 +2,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
-import bayesiannetwork.CPT;
+import bayesiannetwork.Factor;
 import bayesiannetwork.Node;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class VariableEliminationTest {
 
         VariableElimination ve = new VariableElimination(null);
 
-        CPT result = ve.pointWiseProduct(a.getTable(), b.getTable());
+        Factor result = ve.pointWiseProduct(a.getTable(), b.getTable());
 
         double[] expected = new double[]{0.08, 0.09, 0.02, 0.81};
         for (int i = 0; i < result.getProbabilities().size(); i++) {
@@ -43,10 +43,10 @@ public class VariableEliminationTest {
 
         VariableElimination ve = new VariableElimination(null);
 
-        ArrayList<CPT> toSumOut = new ArrayList<>();
+        ArrayList<Factor> toSumOut = new ArrayList<>();
         toSumOut.add(a.getTable().copy());
         toSumOut.add(b.getTable().copy());
-        CPT result = ve.join(toSumOut);
+        Factor result = ve.join(toSumOut);
 
         double[] expected = new double[]{0.08, 0.09, 0.02, 0.81};
         for (int i = 0; i < result.getProbabilities().size(); i++) {
@@ -59,7 +59,7 @@ public class VariableEliminationTest {
         Node a = new Node("A");
         Node b = new Node("B");
 
-        CPT table = new CPT();
+        Factor table = new Factor();
 
         table.addColumn(a);
         table.addColumn(b);
@@ -68,7 +68,7 @@ public class VariableEliminationTest {
 
         VariableElimination ve = new VariableElimination(null);
 
-        CPT result = ve.marginalize(table, "A");
+        Factor result = ve.marginalize(table, "A");
 
         assertEquals(2, result.getNumRows());
         assertEquals(b, result.getColumns().get(0).getNode());
@@ -90,10 +90,10 @@ public class VariableEliminationTest {
         b.getTable().setProbabilities(0.8, 0.2, 0.1, 0.9);
 
         VariableElimination ve = new VariableElimination(null);
-        ArrayList<CPT> toSumOut = new ArrayList<>();
+        ArrayList<Factor> toSumOut = new ArrayList<>();
         toSumOut.add(a.getTable().copy());
         toSumOut.add(b.getTable().copy());
-        CPT result = ve.joinMarginalize(toSumOut, "A");
+        Factor result = ve.joinMarginalize(toSumOut, "A");
 
         assertEquals(2, result.getNumRows());
         assertEquals(b, result.getColumns().get(0).getNode());

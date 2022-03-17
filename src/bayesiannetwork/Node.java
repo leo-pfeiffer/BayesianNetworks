@@ -1,9 +1,7 @@
 package bayesiannetwork;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a node (or variable / event) in a Bayesian network.
@@ -34,7 +32,7 @@ public class Node {
     /**
      * Conditional probability table for the node.
      * */
-    private final CPT table = new CPT(this);
+    private final Factor table = new Factor(this);
 
     public Node(String label) {
         this.label = label;
@@ -56,7 +54,7 @@ public class Node {
         return domain;
     }
 
-    public CPT getTable() {
+    public Factor getTable() {
         return table;
     }
 
@@ -98,16 +96,6 @@ public class Node {
             }
         }
         return false;
-    }
-
-    protected void removeChild(Node node) {
-        // need to handle logic to remove the node from the CPT first
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
-
-    protected void removeParent(Node node) {
-        // need to handle logic to remove the node from the CPT first
-        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     @Override

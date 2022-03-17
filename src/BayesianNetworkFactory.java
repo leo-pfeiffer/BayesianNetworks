@@ -121,7 +121,6 @@ public abstract class BayesianNetworkFactory {
      * */
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createCNX() {
-        // todo FIX instantiation
         BayesianNetwork bn = new BayesianNetwork();
 
         // nodes

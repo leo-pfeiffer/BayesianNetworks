@@ -6,10 +6,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class CPT {
+public class Factor {
 
     /**
      * Node this factor belongs to.
@@ -19,7 +18,7 @@ public class CPT {
     /**
      * List of columns of the table.
      * */
-    private final List<CptColumn> columns = new ArrayList<>();
+    private final List<FactorColumn> columns = new ArrayList<>();
 
     /**
      * Probabilities of each row.
@@ -29,12 +28,12 @@ public class CPT {
     /**
      * Map to quickly find the row index of a given set of values.
      * */
-    private final HashMap<CptRowKey, Integer> rowIndex = new HashMap<>();
+    private final HashMap<FactorRowKey, Integer> rowIndex = new HashMap<>();
 
     /**
      * Create table for a conditional probability for the given node.
      * */
-    public CPT(Node node) {
+    public Factor(Node node) {
         this.node = node;
         this.addColumn(node);
     }
@@ -42,7 +41,7 @@ public class CPT {
     /**
      * Create table for an unconditional probability.
      * */
-    public CPT() {
+    public Factor() {
         this.node = null;
     }
 
@@ -50,12 +49,12 @@ public class CPT {
         return node;
     }
 
-    public List<CptColumn> getColumns() {
+    public List<FactorColumn> getColumns() {
         return columns;
     }
 
-    public List<CptColumn> getColumnsSorted() {
-        List<CptColumn> sortedColumns = new ArrayList<>(this.getColumns());
+    public List<FactorColumn> getColumnsSorted() {
+        List<FactorColumn> sortedColumns = new ArrayList<>(this.getColumns());
         sortedColumns.sort(Comparator.comparing(c -> c.getNode().getLabel()));
         return sortedColumns;
     }
@@ -64,11 +63,11 @@ public class CPT {
         return probabilities;
     }
 
-    public HashMap<CptRowKey, Integer> getRowIndex() {
+    public HashMap<FactorRowKey, Integer> getRowIndex() {
         return rowIndex;
     }
 
-    public double getProbabilitiesByRowKey(CptRowKey key) {
+    public double getProbabilitiesByRowKey(FactorRowKey key) {
         return probabilities.get(rowIndex.get(key));
     }
 
@@ -81,7 +80,7 @@ public class CPT {
     }
 
     public boolean containsNode(String label) {
-        for (CptColumn column : columns) {
+        for (FactorColumn column : columns) {
             if (column.getNode().getLabel().equals(label)) {
                 return true;
             }
@@ -94,24 +93,24 @@ public class CPT {
     }
 
     public Node getNodeFromColumns(String label) {
-        for (CptColumn column : columns) {
+        for (FactorColumn column : columns) {
             if (column.getNode().getLabel().equals(label)) {
                 return column.getNode();
             }
         }
-        throw new IllegalArgumentException("Node not found in CPT.");
+        throw new IllegalArgumentException("Node not found in factor.");
     }
 
-    public CptRowKey getRowKeyForRow(int rowIndex) {
-        CptRowKey key = new CptRowKey();
-        for (CptColumn column : columns) {
+    public FactorRowKey getRowKeyForRow(int rowIndex) {
+        FactorRowKey key = new FactorRowKey();
+        for (FactorColumn column : columns) {
             key.put(column.getNode().getLabel(), column.getTruthValues().get(rowIndex));
         }
         return key;
     }
 
     /**
-     * Set the CPT values (probabilities) from a list.
+     * Set the factor values (probabilities) from a list.
      * @param probabilities Probabilities. Must be the same size as the number of rows.
      * */
     public void setProbabilities(List<Double> probabilities) {
@@ -124,7 +123,7 @@ public class CPT {
     }
 
     /**
-     * Set the CPT values (probabilities) using varargs.
+     * Set the factor values (probabilities) using varargs.
      * @param probabilities Probabilities. Must be the same size as the number of rows.
      * */
     public void setProbabilities(double ...probabilities) {
@@ -152,7 +151,7 @@ public class CPT {
                 truthValues[j] = columns.get(j).getTruthValues().get(i);
             }
 
-            CptRowKey key = new CptRowKey(labels, truthValues);
+            FactorRowKey key = new FactorRowKey(labels, truthValues);
             rowIndex.put(key, i);
         }
     }
@@ -166,17 +165,17 @@ public class CPT {
         }
         // sanity check: all columns should have the same size
         int currentSize = columns.get(0).getSize();
-        for (CptColumn column : columns) {
+        for (FactorColumn column : columns) {
             assert column.getSize() == currentSize;
         }
         return currentSize;
     }
 
     /**
-     * Add a column to the CPT.
+     * Add a column to the factor.
      * */
     public void addColumn(Node node) {
-        CptColumn newColumn = new CptColumn(node);
+        FactorColumn newColumn = new FactorColumn(node);
 
         if (columns.size() == 0) {
             newColumn.setTruthValues(node.getDomain());
@@ -199,7 +198,7 @@ public class CPT {
             newColumn.setTruthValues(newTruthValues);
 
             // increase size of table to make room for new column
-            for (CptColumn column : columns) {
+            for (FactorColumn column : columns) {
                 column.duplicate(domainSize - 1);
             }
         }
@@ -207,9 +206,9 @@ public class CPT {
         columns.add(newColumn);
     }
 
-    public CPT copy() {
-        CPT copy = new CPT(this.node);
-        for (CptColumn column : columns) {
+    public Factor copy() {
+        Factor copy = new Factor(this.node);
+        for (FactorColumn column : columns) {
             if (!column.getNode().equals(node)) {
                 copy.addColumn(column.getNode());
             }
@@ -222,7 +221,7 @@ public class CPT {
 
     public Set<String> getNodeLabelSet() {
         Set<String> labelSet = new HashSet<>();
-        for (CptColumn col: this.getColumns()) {
+        for (FactorColumn col: this.getColumns()) {
             labelSet.add(col.getNode().getLabel());
         }
         return labelSet;
@@ -230,7 +229,7 @@ public class CPT {
 
     public Set<Node> getNodeSet() {
         Set<Node> nodeSet = new HashSet<>();
-        for (CptColumn col: this.getColumns()) {
+        for (FactorColumn col: this.getColumns()) {
             nodeSet.add(col.getNode());
         }
         return nodeSet;
@@ -238,7 +237,6 @@ public class CPT {
 
     @Override
     public String toString() {
-        // todo test
         if (columns.size() == 0) return "";
 
         String firstLine = "";
@@ -257,7 +255,7 @@ public class CPT {
      * */
     private String tableHeaderString() {
         StringBuilder sb = new StringBuilder();
-        for (CptColumn column : getColumnsSorted()) {
+        for (FactorColumn column : getColumnsSorted()) {
             String v = column.getNode().getLabel();
             sb.append(v).append("\t");
         }
@@ -277,7 +275,7 @@ public class CPT {
         DecimalFormat dd = new DecimalFormat("#0.00000");
         StringBuilder sb = new StringBuilder();
         for (int row = 0; row < this.getNumRows(); row++) {
-            for (CptColumn column : getColumnsSorted()) {
+            for (FactorColumn column : getColumnsSorted()) {
                 sb.append(column.getTruthValues().get(row)).append("\t");
             }
 

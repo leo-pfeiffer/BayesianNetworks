@@ -1,4 +1,4 @@
-import bayesiannetwork.CptTest;
+import bayesiannetwork.FactorTest;
 import bayesiannetwork.NodeTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
  **/
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CptTest.class,
+        FactorTest.class,
         NodeTest.class,
         StacsChecksTest.class,
         VariableEliminationTest.class

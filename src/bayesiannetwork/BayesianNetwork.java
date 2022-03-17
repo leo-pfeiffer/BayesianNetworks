@@ -46,38 +46,6 @@ public class BayesianNetwork {
     }
 
     /**
-     * Remove the edge between the parent and child nodes given their labels
-     *
-     * @param parent The label of the parent node.
-     * @param child The label of the child node
-     */
-    public void removeEdge(String parent, String child) {
-        // need to handle logic to remove the node from the CPT first
-        throw new UnsupportedOperationException("Not implemented yet");
-//        if (!hasNode(parent) || !hasNode(child)) {
-//            throw new IllegalArgumentException("One of the nodes does not exist");
-//        }
-//        Node parentNode = nodeMap.get(parent);
-//        Node childNode = nodeMap.get(child);
-//        removeEdge(parentNode, childNode);
-    }
-
-    /**
-     * Remove the edge between the parent and child nodes
-     *
-     * @param parent The parent node.
-     * @param child The child node.
-     */
-    public void removeEdge(Node parent, Node child) {
-        // need to handle logic to remove the node from the CPT first
-        throw new UnsupportedOperationException("Not implemented yet");
-//        if (hasEdge(parent, child)) {
-//             parent.removeChild(child);
-//             child.removeParent(parent);
-//         }
-    }
-
-    /**
      * Add an edge between a parent and child node given their labels if it doesn't already exist
      *
      * @param parent The parent node label.
@@ -159,7 +127,7 @@ public class BayesianNetwork {
             }
         }
 
-        sb.append("\n").append("CPT: ============================================ \n");
+        sb.append("\n").append("Factor: ============================================ \n");
 
         for (Node node : nodes) {
             sb.append(node.getTable()).append("\n");

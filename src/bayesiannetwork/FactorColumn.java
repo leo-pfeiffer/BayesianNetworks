@@ -1,14 +1,12 @@
 package bayesiannetwork;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Represents a column for a variable in the CPT.
+ * Represents a column for a variable in the factor.
  * */
-public class CptColumn {
+public class FactorColumn {
 
     /**
      * Node represented by this column
@@ -20,7 +18,7 @@ public class CptColumn {
      * */
     private final List<Integer> truthValues = new ArrayList<>();
 
-    public CptColumn(Node node) {
+    public FactorColumn(Node node) {
         this.node = node;
     }
 
@@ -71,8 +69,8 @@ public class CptColumn {
         }
     }
 
-    public CptColumn copy() {
-        CptColumn copy = new CptColumn(node);
+    public FactorColumn copy() {
+        FactorColumn copy = new FactorColumn(node);
         List<Integer> copiedTruthValues = new ArrayList<>(this.truthValues);
         copy.setTruthValues(copiedTruthValues);
         return copy;
