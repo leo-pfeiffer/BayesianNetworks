@@ -154,14 +154,15 @@ public abstract class BayesianNetworkFactory {
         logged.getTable().setProbabilities(0.7, 0.3, 0.3, 0.7);
         maintenance.getTable().setProbabilities(0.1, 0.9);
         maintenanceInfo.getTable().setProbabilities(0.02, 0.98);
-        firewall.getTable().setProbabilities(0.5, 0.5, 0.03, 0.99, 0.5, 0.5, 0.97, 0.1);
+        firewall.getTable().setProbabilities(0.5, 0.5, 0.03, 0.99, 0.5, 0.5, 0.99, 0.1);
         website.getTable().setProbabilities(0.05, 0.95);
         blocked.getTable().setProbabilities(0.85, 0.15, 0.05, 0.95);
         alert.getTable().setProbabilities(
-                0.95, 0.7125, 0.7125, 0.475, 0.7125, 0.475, 0.475, 0.2375,
-                0.7125, 0.475, 0.475, 0.2375, 0.457, 0.2375, 0.2375, 0,
-                0.05, 0.2875, 0.2875, 0.525, 0.2875, 0.525, 0.525, 0.7625,
-                0.2875, 0.525, 0.525, 0.7625, 0.525, 0.7625, 0.7625, 1
+                0.95, 0.05, 0.7125, 0.2875, 0.7125, 0.2875,
+                0.475, 0.525, 0.7125, 0.2875, 0.475, 0.525,
+                0.475, 0.525, 0.2375, 0.7625, 0.7125, 0.2875,
+                0.475, 0.525, 0.475, 0.525, 0.2375, 0.7625,
+                0.475, 0.525, 0.2375, 0.7625, 0.2375, 0.7625, 0, 1
         );
 
         return bn;
