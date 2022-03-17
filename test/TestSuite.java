@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         CptTest.class,
         NodeTest.class,
+        StacsChecksTest.class,
         VariableEliminationTest.class
 })
 public class TestSuite { }
