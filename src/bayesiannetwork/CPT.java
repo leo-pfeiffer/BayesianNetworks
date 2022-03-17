@@ -2,6 +2,7 @@ package bayesiannetwork;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,6 +52,12 @@ public class CPT {
 
     public List<CptColumn> getColumns() {
         return columns;
+    }
+
+    public List<CptColumn> getColumnsSorted() {
+        List<CptColumn> sortedColumns = new ArrayList<>(this.getColumns());
+        sortedColumns.sort(Comparator.comparing(c -> c.getNode().getLabel()));
+        return sortedColumns;
     }
 
     public List<Double> getProbabilities() {
@@ -250,7 +257,7 @@ public class CPT {
      * */
     private String tableHeaderString() {
         StringBuilder sb = new StringBuilder();
-        for (CptColumn column : columns) {
+        for (CptColumn column : getColumnsSorted()) {
             String v = column.getNode().getLabel();
             sb.append(v).append("\t");
         }
@@ -270,7 +277,7 @@ public class CPT {
         DecimalFormat dd = new DecimalFormat("#0.00000");
         StringBuilder sb = new StringBuilder();
         for (int row = 0; row < this.getNumRows(); row++) {
-            for (CptColumn column : columns) {
+            for (CptColumn column : getColumnsSorted()) {
                 sb.append(column.getTruthValues().get(row)).append("\t");
             }
 

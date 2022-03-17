@@ -38,8 +38,8 @@ public abstract class BayesianNetworkFactory {
 
         // probabilities
         a.getTable().setProbabilities(0.05, 0.95);
-        b.getTable().setProbabilities(0.05, 0.80, 0.95, 0.2);
-        c.getTable().setProbabilities(0.1, 0.3, 0.9, 0.7);
+        b.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);
+        c.getTable().setProbabilities(0.1, 0.9, 0.3, 0.7);
         d.getTable().setProbabilities(0.4, 0.6, 0.6, 0.4);
 
         return bn;
@@ -69,11 +69,11 @@ public abstract class BayesianNetworkFactory {
 
         // probabilities
         j.getTable().setProbabilities(0.05, 0.95);
-        k.getTable().setProbabilities(0.9, 0.7, 0.1, 0.3);
+        k.getTable().setProbabilities(0.9, 0.1, 0.7, 0.3);
         l.getTable().setProbabilities(0.7, 0.3);
-        m.getTable().setProbabilities(0.6, 0.2, 0.7, 0.1, 0.4, 0.8, 0.3, 0.9);
-        n.getTable().setProbabilities(0.6, 0.2, 0.4, 0.8);
-        o.getTable().setProbabilities(0.05, 0.8, 0.95, 0.2);
+        m.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8, 0.7, 0.3, 0.1, 0.9);
+        n.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8);
+        o.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);
 
         return bn;
     }
@@ -106,12 +106,12 @@ public abstract class BayesianNetworkFactory {
 
         // probabilities
         p.getTable().setProbabilities(0.05, 0.95);
-        q.getTable().setProbabilities(0.9, 0.7, 0.1, 0.3);
+        q.getTable().setProbabilities(0.9, 0.1, 0.7, 0.3);
         r.getTable().setProbabilities(0.7, 0.3);
-        s.getTable().setProbabilities(0.6, 0.2, 0.7, 0.1, 0.4, 0.8, 0.3, 0.9);
-        v.getTable().setProbabilities(0.7, 0.15, 0.55, 0.1, 0.3, 0.85, 0.45, 0.9);
-        u.getTable().setProbabilities(0.05, 0.8, 0.95, 0.2);
-        z.getTable().setProbabilities(0.65, 0.4, 0.7, 0.2, 0.35, 0.6, 0.3, 0.8);
+        s.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8, 0.7, 0.3, 0.1, 0.9);
+        v.getTable().setProbabilities(0.7, 0.3, 0.15, 0.85, 0.55, 0.45, 0.1, 0.9);
+        u.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);
+        z.getTable().setProbabilities(0.65, 0.35, 0.4, 0.6, 0.7, 0.3, 0.2, 0.8);
 
         return bn;
     }
@@ -121,6 +121,7 @@ public abstract class BayesianNetworkFactory {
      * */
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createCNX() {
+        // todo FIX instantiation
         BayesianNetwork bn = new BayesianNetwork();
 
         // nodes
