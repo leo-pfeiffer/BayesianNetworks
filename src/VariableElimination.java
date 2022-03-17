@@ -30,7 +30,7 @@ public class VariableElimination {
      * */
     public Double getResult(Node node, Order order, int truthValue) {
         pruneOrder(order, node);
-        List<CPT> factors = createFactorList();
+        List<CPT> factors = createFactorList(order, node);
 
         for (Node n : order) {
             String y = n.getLabel();
@@ -60,10 +60,12 @@ public class VariableElimination {
     /**
      * Create a list containing copies of the factors of all nodes of the network.
      * */
-    private List<CPT> createFactorList() {
+    private List<CPT> createFactorList(Order order, Node node) {
         List<CPT> factors = new ArrayList<>();
         for (Node n : this.network.getNodes()) {
-            factors.add(n.getTable().copy());
+            if (order.contains(n) || n.equals(node)) {
+                factors.add(n.getTable().copy());
+            }
         }
         return factors;
     }

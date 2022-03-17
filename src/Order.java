@@ -31,6 +31,10 @@ public class Order implements Iterable<Node> {
         return order.get(index);
     }
 
+    public boolean contains(Node node) {
+        return order.contains(node);
+    }
+
     public int size() {
         return order.size();
     }

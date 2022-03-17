@@ -109,4 +109,9 @@ public class Node {
         // need to handle logic to remove the node from the CPT first
         throw new UnsupportedOperationException("Not implemented yet.");
     }
+
+    @Override
+    public String toString() {
+        return "Node{" + getLabel() + "}";
+    }
 }
