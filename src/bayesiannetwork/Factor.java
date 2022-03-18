@@ -34,6 +34,7 @@ public class Factor {
      * Create table for a conditional probability for the given node.
      * */
     public Factor(Node node) {
+        assert node != null;
         this.node = node;
         this.addColumn(node);
     }
@@ -57,6 +58,15 @@ public class Factor {
         List<FactorColumn> sortedColumns = new ArrayList<>(this.getColumns());
         sortedColumns.sort(Comparator.comparing(c -> c.getNode().getLabel()));
         return sortedColumns;
+    }
+
+    public FactorColumn getColumnByNode(Node node) {
+        for (FactorColumn column : this.getColumns()) {
+            if (column.getNode() == node) {
+                return column;
+            }
+        }
+        return null;
     }
 
     public List<Double> getProbabilities() {
@@ -120,6 +130,14 @@ public class Factor {
         this.probabilities.clear();
         this.probabilities.addAll(probabilities);
         createRowIndex();
+    }
+
+    public void setProbabilityForRow(int row, double probability) {
+        probabilities.set(row, probability);
+    }
+
+    public void setProbabilityForRowKey(FactorRowKey key, double probability) {
+        setProbabilityForRow(rowIndex.get(key), probability);
     }
 
     /**
@@ -207,9 +225,17 @@ public class Factor {
     }
 
     public Factor copy() {
-        Factor copy = new Factor(this.node);
+        Factor copy;
+        if (this.node == null) {
+            copy = new Factor();
+        } else {
+            copy = new Factor(this.node);
+        }
         for (FactorColumn column : columns) {
-            if (!column.getNode().equals(node)) {
+            if (this.node == null) {
+                copy.addColumn(column.getNode());
+            }
+            else if (!column.getNode().equals(node)) {
                 copy.addColumn(column.getNode());
             }
         }
@@ -279,8 +305,15 @@ public class Factor {
                 sb.append(column.getTruthValues().get(row)).append("\t");
             }
 
-            double p = probabilities.get(row);
-            sb.append("|\t").append(dd.format(p)).append("\n");
+            sb.append("|\t");
+
+            if (probabilities.size() > 0) {
+                double p = probabilities.get(row);
+                sb.append(dd.format(p));
+            } else {
+                sb.append("not set");
+            }
+            sb.append("\n");
         }
         return sb.toString();
     }

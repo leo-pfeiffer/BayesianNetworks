@@ -31,7 +31,12 @@ public class VariableElimination {
     public Double getResult(Node node, Order order, int truthValue) {
         pruneOrder(order, node);
         List<Factor> factors = createFactorList(order, node);
+        combineFactors(order, factors);
+        return extract(factors, node, truthValue);
 
+    }
+
+    protected void combineFactors(Order order, List<Factor> factors) {
         for (Node n : order) {
             String y = n.getLabel();
             List<Factor> toSumOut = createToSumOutList(factors, y);
@@ -39,9 +44,6 @@ public class VariableElimination {
             Factor newFactor = joinMarginalize(toSumOut, y);
             factors.add(newFactor);
         }
-
-        return extract(factors, node, truthValue);
-
     }
 
     /**
@@ -60,7 +62,7 @@ public class VariableElimination {
     /**
      * Create a list containing copies of the factors of all nodes of the network.
      * */
-    private List<Factor> createFactorList(Order order, Node node) {
+    protected List<Factor> createFactorList(Order order, Node node) {
         List<Factor> factors = new ArrayList<>();
         for (Node n : this.network.getNodes()) {
             if (order.contains(n) || n.equals(node)) {
@@ -260,7 +262,7 @@ public class VariableElimination {
     /**
      * Extract the result from factors = [f(node)], which is f(node) using the truth value.
      * */
-    private Double extract(List<Factor> factors, Node node, int truthValue) {
+    protected Double extract(List<Factor> factors, Node node, int truthValue) {
         Factor f = factors.get(0);
         FactorRowKey key = new FactorRowKey();
         key.put(node.getLabel(), truthValue);

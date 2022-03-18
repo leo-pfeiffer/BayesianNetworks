@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
 import org.junit.Test;
 
@@ -95,6 +96,88 @@ public class StacsChecksTest {
         VariableElimination ve = new VariableElimination(bn);
         double result = ve.getResult(bn.getNode("S"), order, 1);
         assertEquals(0.49660, result, 0.001);
+    }
+
+    @Test
+    public void testBNAP3q1() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNA();
+        Order order = new Order();
+        order.add(bn.getNode("A"));
+        order.add(bn.getNode("B"));
+        order.add(bn.getNode("C"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("A"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
+        assertEquals(0.54200, result, 0.001);
+    }
+
+    @Test
+    public void testBNAP3q2() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNA();
+        Order order = new Order();
+        order.add(bn.getNode("A"));
+        order.add(bn.getNode("B"));
+        order.add(bn.getNode("C"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("A"), 1));
+        evidence.add(new Evidence(bn.getNode("B"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
+        assertEquals(0.58000, result, 0.001);
+    }
+
+    @Test
+    public void testBNAP3q3() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNA();
+        Order order = new Order();
+        order.add(bn.getNode("A"));
+        order.add(bn.getNode("B"));
+        order.add(bn.getNode("C"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("C"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("A"), order, 1, evidence);
+        assertEquals(0.09831, result, 0.001);
+    }
+
+    @Test
+    public void testBNAP3q4() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNA();
+        Order order = new Order();
+        order.add(bn.getNode("A"));
+        order.add(bn.getNode("B"));
+        order.add(bn.getNode("C"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("B"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
+        assertEquals(0.58000, result, 0.001);
+    }
+
+    @Test
+    public void testBNAP3q5() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNA();
+        Order order = new Order();
+        order.add(bn.getNode("A"));
+        order.add(bn.getNode("B"));
+        order.add(bn.getNode("C"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("A"), 0));
+        evidence.add(new Evidence(bn.getNode("B"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
+        assertEquals(0.58000, result, 0.001);
     }
 
 }

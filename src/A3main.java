@@ -26,69 +26,40 @@ public class A3main {
 
         switch (args[0]) {
             case "P1": {
-                //construct the network in args[1]
-                String network = args[1];
-                System.out.println("Network " + network);
-                BayesianNetwork bn = BayesianNetworkFactory.create(network);
+                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
                 System.out.println(bn);
             }
             break;
 
             case "P2": {
-                //construct the network in args[1]
-                String network = args[1];
-                BayesianNetwork bn = BayesianNetworkFactory.create(network);
+                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
                 String[] query = getQueriedNode(sc);
-                String variable = query[0];
-
-                Node variableNode = bn.getNode(variable);
-                if (variableNode == null) {
-                    throw new IllegalArgumentException("Invalid node: " + variable);
-                }
-
-                String value = query[1];
-
-                int numericValue;
-                switch (value) {
-                    case "T":
-                        numericValue = 1;
-                        break;
-                    case "F":
-                        numericValue = 0;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Invalid value: " + value);
-                }
-
-                String[] orderRaw = getOrder(sc);
-                Order order = new Order();
-                for (String n : orderRaw) {
-                    Node node = bn.getNode(n);
-                    if (node == null) {
-                        throw new IllegalArgumentException("Invalid node: " + n);
-                    }
-                    order.add(node);
-                }
+                Node variableNode = getNode(query[0], bn);
+                int numericValue = truthValueToInt(query[1]);
+                Order order = orderFromInput(getOrder(sc), bn);
 
                 // execute query of p(variable=value) with given order of elimination
                 VariableElimination ve = new VariableElimination(bn);
-
                 double result = ve.getResult(variableNode, order, numericValue);
-                // double result = 0.570501;
+
                 printResult(result);
             }
             break;
 
             case "P3": {
-                //construct the network in args[1]
+                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
+
                 String[] query = getQueriedNode(sc);
-                String variable = query[0];
-                String value = query[1];
-                String[] order = getOrder(sc);
-                ArrayList<String[]> evidence = getEvidence(sc);
+                Node variableNode = getNode(query[0], bn);
+                int numericValue = truthValueToInt(query[1]);
+                Order order = orderFromInput(getOrder(sc), bn);
+                // ArrayList<String[]> evidence = getEvidence(sc);
+                ArrayList<Evidence> evidence = getEvidence(sc, bn);
+
                 // execute query of p(variable=value|evidence) with given order of elimination
-                double result = 0.570501;
+                VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+                double result = ve.getResult(variableNode, order, numericValue, evidence);
                 printResult(result);
             }
             break;
@@ -125,6 +96,23 @@ public class A3main {
         return evidence;
     }
 
+    //method to obtain the evidence from the user
+    private static ArrayList<Evidence> getEvidence(Scanner sc, BayesianNetwork bn) {
+
+        System.out.println("Evidence:");
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        String[] line = sc.nextLine().split(" ");
+
+        for (String st : line) {
+            String[] ev = st.split(":");
+            int truthValue = truthValueToInt(ev[1]);
+            Node node = getNode(ev[0], bn);
+            evidence.add(new Evidence(node, truthValue));
+        }
+        return evidence;
+    }
+
+
     //method to obtain the order from the user
     private static String[] getOrder(Scanner sc) {
 
@@ -147,6 +135,37 @@ public class A3main {
 
         DecimalFormat dd = new DecimalFormat("#0.00000");
         System.out.println(dd.format(result));
+    }
+
+    private static int truthValueToInt(String value) {
+        switch (value) {
+            case "T":
+                return 1;
+            case "F":
+                return 0;
+            default:
+                throw new IllegalArgumentException("Invalid value: " + value);
+        }
+    }
+
+    private static Order orderFromInput(String[] orderRaw, BayesianNetwork bn) {
+        Order order = new Order();
+        for (String n : orderRaw) {
+            Node node = bn.getNode(n);
+            if (node == null) {
+                throw new IllegalArgumentException("Invalid node: " + n);
+            }
+            order.add(node);
+        }
+        return order;
+    }
+
+    private static Node getNode(String variable, BayesianNetwork bn) {
+        Node variableNode = bn.getNode(variable);
+        if (variableNode == null) {
+            throw new IllegalArgumentException("Invalid node: " + variable);
+        }
+        return variableNode;
     }
 
 }
