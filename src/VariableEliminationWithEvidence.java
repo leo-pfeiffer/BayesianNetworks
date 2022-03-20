@@ -33,7 +33,8 @@ public class VariableEliminationWithEvidence extends VariableElimination {
             // check if node is ancestor of evidence node
             boolean evidenceAncestor = false;
             for (Evidence e : evidence) {
-                if (e.getNode().equals(n) || e.getNode().hasAncestor(n)) {
+                // retain node if it is an ancestor of an evidence node but not the NODE itself
+                if (!e.getNode().equals(node) && (e.getNode().equals(n) || e.getNode().hasAncestor(n))) {
                     evidenceAncestor = true;
                     break;
                 }
@@ -45,6 +46,7 @@ public class VariableEliminationWithEvidence extends VariableElimination {
             }
         }
         order.removeAll(toRemove);
+        order.remove(node);
     }
 
     /**
