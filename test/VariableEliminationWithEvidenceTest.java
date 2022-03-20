@@ -35,6 +35,31 @@ public class VariableEliminationWithEvidenceTest {
         assertEquals(bn.getNode("L"), order.get(3));
     }
 
+    /**
+     * Using example L12 p.26
+     * */
+    @Test
+    public void testFullExample() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNB();
+        Order order = new Order();
+        order.add(bn.getNode("O"));
+        order.add(bn.getNode("J"));
+        order.add(bn.getNode("M"));
+        order.add(bn.getNode("L"));
+        order.add(bn.getNode("N"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("O"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+
+        int truthValue = 1;
+        Node node = bn.getNode("K");
+
+         double result = ve.getResult(node, order, truthValue, evidence);
+         assertEquals(0.54385, result, 0.00001);
+    }
+
     @Test
     public void joinProjectEvidenceSingleEvidence() {
         Node a = new Node("A");
@@ -59,7 +84,7 @@ public class VariableEliminationWithEvidenceTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(null);
         ve.projectEvidence(factors, evidence);
 
-        double[] expected = {0, 0.5, 0, 0.5};
+        double[] expected = {0.5, 0, 0.5, 0};
         for (int i = 0; i < f1.getNumRows(); i++) {
             assertEquals(expected[i], f1.getProbabilities().get(i), 0.001);
         }

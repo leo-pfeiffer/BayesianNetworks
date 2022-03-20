@@ -22,7 +22,7 @@ public class VariableEliminationWithEvidence extends VariableElimination {
         List<Factor> factors = createFactorList(order, node);
         projectEvidence(factors, evidence);
         combineFactors(order, factors);
-        joinNormalise(factors, node);
+        joinNormalize(factors, node);
         return extract(factors, node, truthValue);
     }
 
@@ -61,19 +61,19 @@ public class VariableEliminationWithEvidence extends VariableElimination {
                     break;
                 }
             }
-            if (evFactor == null) throw new AssertionError("This shouldn't happen.");
+             if (evFactor == null) throw new AssertionError("This shouldn't happen.");
 
             // set the probabilities for the evidence
             FactorColumn evCol = evFactor.getColumnByNode(e.getNode());
             for (int row = 0; row < evFactor.getNumRows(); row++) {
-                if (evCol.getTruthValues().get(row) == e.getValue()) {
+                if (evCol.getTruthValues().get(row) != e.getValue()) {
                     evFactor.setProbabilityForRow(row, 0);
                 }
             }
         }
     }
 
-    protected void joinNormalise(List<Factor> factors, Node node) {
+    protected void joinNormalize(List<Factor> factors, Node node) {
         // sanity check: make sure all factors are of the correct node
         for (Factor f : factors) {
             if (f.getColumns().size() > 1) {
@@ -101,6 +101,22 @@ public class VariableEliminationWithEvidence extends VariableElimination {
                 newFactor.setProbabilityForRowKey(key, p1 * p2);
             }
         }
+
+        // sanity check: factor should only contain two rows
+        if (newFactor.getNumRows() != 2) throw new AssertionError("Factor should only contain two rows");
+
+        // normalize
+        double colSum = 0;
+        for (double p : newFactor.getProbabilities()) colSum += p;
+        for (int row = 0; row < newFactor.getNumRows(); row++) {
+            double newProb = newFactor.getProbabilities().get(row) / colSum;
+            newFactor.setProbabilityForRow(row, newProb);
+        }
+
+        // sanity check: probabilities should sum to 1
+        double sum = 0;
+        for (double p : newFactor.getProbabilities()) sum += p;
+        if (Math.abs(sum - 1) > 1e-6) throw new AssertionError("Probabilities should sum to 1");
 
         // replace previous factors with new factor
         factors.clear();
