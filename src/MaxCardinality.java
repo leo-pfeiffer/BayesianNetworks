@@ -3,9 +3,10 @@ import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.InducedGraph;
 import bayesiannetwork.Node;
 
-public class MaxCardinalitySearch {
+public class MaxCardinality extends OrderAlgo{
 
-    public static Order findOrder(BayesianNetwork bn, Node queryNode) {
+    @Override
+    public Order findOrder(BayesianNetwork bn, Node queryNode) {
         InducedGraph g = new InducedGraph(bn.getNodes());
         ArrayList<Node> unmarked = new ArrayList<>(bn.getNodes());
         ArrayList<Node> marked = new ArrayList<>();

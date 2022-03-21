@@ -8,7 +8,7 @@ import bayesiannetwork.InducedGraph;
 import bayesiannetwork.Node;
 import org.junit.Test;
 
-public class MaxCardinalitySearchTest {
+public class MaxCardinalityTest {
 
     /**
      * Test example from lecture 13 p.27
@@ -16,7 +16,8 @@ public class MaxCardinalitySearchTest {
     @Test
     public void testExample() {
         BayesianNetwork bn = BayesianNetworkFactory.createBNB();
-        Order order = MaxCardinalitySearch.findOrder(bn, bn.getNode("N"));
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("N"));
 
         // last one must be M
         assertEquals(order.get(order.size()-1).getLabel(), "M");
@@ -35,7 +36,7 @@ public class MaxCardinalitySearchTest {
         unmarked.add(bn.getNode("N"));
         marked.add(bn.getNode("M"));
 
-        Node node = MaxCardinalitySearch.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
+        Node node = MaxCardinality.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
         assertEquals(node.getLabel(), "N");
     }
 
@@ -48,7 +49,7 @@ public class MaxCardinalitySearchTest {
 
         marked.add(bn.getNode("P"));
 
-        Node node = MaxCardinalitySearch.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
+        Node node = MaxCardinality.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
         assertEquals(node.getLabel(), "Q");
     }
 
@@ -62,7 +63,7 @@ public class MaxCardinalitySearchTest {
         unmarked.add(bn.getNode("P"));
         marked.removeAll(unmarked);
 
-        Node node = MaxCardinalitySearch.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
+        Node node = MaxCardinality.findMaxCardinalityNode(unmarked, marked, new InducedGraph(bn.getNodes()));
         assertEquals(node.getLabel(), "P");
     }
 }

@@ -37,7 +37,7 @@ public class InducedGraph {
         return new ArrayList<>(graph.keySet());
     }
 
-    private void createEdge(Node node1, Node node2) {
+    public void createEdge(Node node1, Node node2) {
         addNodeToOtherNode(node1, node2);
         addNodeToOtherNode(node2, node1);
     }

@@ -17,8 +17,6 @@ import bayesiannetwork.Node;
  * Feel free to change and delete parts of the code as you prefer
  *
  */
-
-
 public class A3main {
 
     public static void main(String[] args) {
@@ -72,8 +70,9 @@ public class A3main {
                 int numericValue = truthValueToInt(query[1]);
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
-                // generate elimination order
-                Order order = MaxCardinalitySearch.findOrder(bn, variableNode);
+                // generate elimination order: orderAlgo either MC or GME
+                OrderAlgo orderAlgo = OrderAlgoFactory.create(args[2]);
+                Order order = orderAlgo.findOrder(bn, variableNode);
                 System.out.println(order);
 
                 VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);

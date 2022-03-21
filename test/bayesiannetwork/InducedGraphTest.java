@@ -26,7 +26,7 @@ public class InducedGraphTest {
         InducedGraph g = new InducedGraph(nodes);
         assertEquals(g.getGraph().size(), nodes.size());
         assertEquals(1, g.getGraph().get(bn.getNode("J")).size());
-        assertEquals(2, g.getGraph().get(bn.getNode("K")).size());
+        assertEquals(3, g.getGraph().get(bn.getNode("K")).size());
         assertEquals(2, g.getGraph().get(bn.getNode("L")).size());
         assertEquals(4, g.getGraph().get(bn.getNode("M")).size());
         assertEquals(1, g.getGraph().get(bn.getNode("N")).size());
