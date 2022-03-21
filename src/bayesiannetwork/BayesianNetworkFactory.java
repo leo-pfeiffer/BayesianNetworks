@@ -1,5 +1,4 @@
-import bayesiannetwork.BayesianNetwork;
-import bayesiannetwork.Node;
+package bayesiannetwork;
 
 public abstract class BayesianNetworkFactory {
 

@@ -2,6 +2,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
+import bayesiannetwork.BayesianNetworkFactory;
 import org.junit.Test;
 
 /**

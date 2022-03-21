@@ -2,6 +2,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import bayesiannetwork.BayesianNetwork;
+import bayesiannetwork.BayesianNetworkFactory;
 import bayesiannetwork.Node;
 
 /********************Starter Code
@@ -54,7 +55,6 @@ public class A3main {
                 Node variableNode = getNode(query[0], bn);
                 int numericValue = truthValueToInt(query[1]);
                 Order order = orderFromInput(getOrder(sc), bn);
-                // ArrayList<String[]> evidence = getEvidence(sc);
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
                 // execute query of p(variable=value|evidence) with given order of elimination
@@ -65,17 +65,19 @@ public class A3main {
             break;
 
             case "P4": {
-                //construct the network in args[1]
+                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
+
                 String[] query = getQueriedNode(sc);
-                String variable = query[0];
-                String value = query[1];
-                String order = "A,B";
-                ArrayList<String[]> evidence = getEvidence(sc);
+                Node variableNode = getNode(query[0], bn);
+                int numericValue = truthValueToInt(query[1]);
+                ArrayList<Evidence> evidence = getEvidence(sc, bn);
+
                 // execute query of p(variable=value|evidence) with given order of elimination
-                //print the order
-                System.out.println(order);
-                double result = 0.570501;
-                printResult(result);
+
+                // todo print the order
+                VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+//                double result = ve.getResult(variableNode, order, numericValue, evidence);
+//                printResult(result);
             }
             break;
         }
