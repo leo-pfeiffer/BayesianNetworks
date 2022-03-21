@@ -33,6 +33,10 @@ public class InducedGraph {
         return graph;
     }
 
+    public List<Node> getNodes() {
+        return new ArrayList<>(graph.keySet());
+    }
+
     private void createEdge(Node node1, Node node2) {
         addNodeToOtherNode(node1, node2);
         addNodeToOtherNode(node2, node1);
@@ -63,10 +67,12 @@ public class InducedGraph {
         nodes.sort(Comparator.comparing(Node::getLabel));
         for (Node node : nodes) {
             sb.append(node.getLabel()).append(" -> ");
-            for (Node child : graph.get(node)) {
-                sb.append(child.getLabel()).append(", ");
+            for (int i = 0; i < graph.get(node).size(); i++) {
+                sb.append(graph.get(node).get(i).getLabel());
+                if (i < graph.get(node).size() - 1) {
+                    sb.append(", ");
+                }
             }
-            sb.delete(sb.length() - 2, sb.length());
             sb.append("\n");
         }
 

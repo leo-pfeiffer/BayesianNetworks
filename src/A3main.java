@@ -72,12 +72,13 @@ public class A3main {
                 int numericValue = truthValueToInt(query[1]);
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
-                // execute query of p(variable=value|evidence) with given order of elimination
+                // generate elimination order
+                Order order = MaxCardinalitySearch.findOrder(bn, variableNode);
+                System.out.println(order);
 
-                // todo print the order
                 VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
-//                double result = ve.getResult(variableNode, order, numericValue, evidence);
-//                printResult(result);
+                double result = ve.getResult(variableNode, order, numericValue, evidence);
+                printResult(result);
             }
             break;
         }

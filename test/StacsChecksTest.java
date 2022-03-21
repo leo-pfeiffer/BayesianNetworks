@@ -6,7 +6,7 @@ import bayesiannetwork.BayesianNetworkFactory;
 import org.junit.Test;
 
 /**
- * This is a JUnit port of some of the provided stacschecks.
+ * This is a JUnit port of the provided stacschecks, to which I added tests using the calculated orders.
  * */
 public class StacsChecksTest {
 
@@ -113,6 +113,12 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
         assertEquals(0.54200, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("D"));
+        double result2 = ve2.getResult(bn.getNode("D"), order, 1, evidence);
+        assertEquals(0.54200, result2, 0.001);
+
     }
 
     @Test
@@ -130,6 +136,12 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
         assertEquals(0.58000, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("D"));
+        double result2 = ve.getResult(bn.getNode("D"), order2, 1, evidence);
+        assertEquals(0.58000, result2, 0.001);
+
     }
 
     @Test
@@ -146,6 +158,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("A"), order, 1, evidence);
         assertEquals(0.09831, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("A"));
+        double result2 = ve.getResult(bn.getNode("A"), order2, 1, evidence);
+        assertEquals(0.09831, result2, 0.001);
     }
 
     @Test
@@ -162,6 +179,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
         assertEquals(0.58000, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("D"));
+        double result2 = ve.getResult(bn.getNode("D"), order2, 1, evidence);
+        assertEquals(0.58000, result2, 0.001);
     }
 
     @Test
@@ -179,6 +201,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("D"), order, 1, evidence);
         assertEquals(0.58000, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("D"));
+        double result2 = ve.getResult(bn.getNode("D"), order2, 1, evidence);
+        assertEquals(0.58000, result2, 0.001);
     }
 
     @Test
@@ -197,6 +224,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("K"), order, 1, evidence);
         assertEquals(0.54385, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("K"));
+        double result2 = ve.getResult(bn.getNode("K"), order2, 1, evidence);
+        assertEquals(0.54385, result2, 0.001);
     }
 
     @Test
@@ -215,6 +247,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("J"), order, 1, evidence);
         assertEquals(0.04233, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("J"));
+        double result2 = ve.getResult(bn.getNode("J"), order2, 1, evidence);
+        assertEquals(0.04233, result2, 0.001);
     }
 
     @Test
@@ -233,6 +270,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("N"), order, 1, evidence);
         assertEquals(0.43360, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("N"));
+        double result2 = ve.getResult(bn.getNode("N"), order2, 1, evidence);
+        assertEquals(0.43360, result2, 0.001);
     }
 
     @Test
@@ -252,6 +294,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("N"), order, 1, evidence);
         assertEquals(0.42400, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("N"));
+        double result2 = ve.getResult(bn.getNode("N"), order2, 1, evidence);
+        assertEquals(0.42400, result2, 0.001);
     }
 
     @Test
@@ -271,6 +318,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("N"), order, 1, evidence);
         assertEquals(0.45600, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("N"));
+        double result2 = ve.getResult(bn.getNode("N"), order2, 1, evidence);
+        assertEquals(0.45600, result2, 0.001);
     }
 
     @Test
@@ -291,6 +343,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("Z"), order, 1, evidence);
         assertEquals(0.43368, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("Z"));
+        double result2 = ve.getResult(bn.getNode("Z"), order2, 1, evidence);
+        assertEquals(0.43368, result2, 0.001);
     }
 
     @Test
@@ -310,6 +367,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("P"), order, 1, evidence);
         assertEquals(0.05509, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("P"));
+        double result2 = ve.getResult(bn.getNode("P"), order2, 1, evidence);
+        assertEquals(0.05509, result2, 0.001);
     }
 
     @Test
@@ -330,6 +392,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("Q"), order, 1, evidence);
         assertEquals(0.92141, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("Q"));
+        double result2 = ve.getResult(bn.getNode("Q"), order2, 1, evidence);
+        assertEquals(0.92141, result2, 0.001);
     }
 
     @Test
@@ -351,6 +418,11 @@ public class StacsChecksTest {
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("U"), order, 1, evidence);
         assertEquals(0.34204, result, 0.001);
+
+        VariableEliminationWithEvidence ve2 = new VariableEliminationWithEvidence(bn);
+        Order order2 = MaxCardinalitySearch.findOrder(bn, bn.getNode("U"));
+        double result2 = ve.getResult(bn.getNode("U"), order2, 1, evidence);
+        assertEquals(0.34204, result2, 0.001);
     }
 
 }

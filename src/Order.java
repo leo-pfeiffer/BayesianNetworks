@@ -43,4 +43,17 @@ public class Order implements Iterable<Node> {
     public Iterator<Node> iterator() {
         return this.order.iterator();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order: ");
+        for (int i = 0; i < order.size(); i++) {
+            sb.append(order.get(i).getLabel());
+            if (i < order.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
 }
