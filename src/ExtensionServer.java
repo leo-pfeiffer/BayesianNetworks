@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.BayesianNetworkFactory;
@@ -15,7 +16,6 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class ExtensionServer {
 
@@ -54,30 +54,46 @@ public class ExtensionServer {
     }
 
     private static void handlePostRequest(HttpExchange exchange) throws IOException {
-        System.out.println("POST request received.");
 
+        JsonConf conf;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody()))) {
             StringBuilder sb = new StringBuilder();
             String line;
             while((line = br.readLine()) != null) {
                 sb.append(line);
-                System.out.println(line);
             }
-            JsonConf conf = readJSON(sb.toString());
-            // double result = runConfiguration(conf);
-            double result = 0.0123;
-
-            String response = "{" + "\"result\": " + result + "}";
-
-            OutputStream out = exchange.getResponseBody();
-            exchange.sendResponseHeaders(200, response.length());
-            out.write(String.valueOf(response).getBytes());
-            out.close();
-
-
+            br.close();
+            String confString = sb.toString();
+            System.out.println(confString);
+            conf = readJSON(confString);
+            assert conf != null;
         } catch (IOException e) {
             e.printStackTrace();
+            OutputStream out = exchange.getResponseBody();
+            String response = "Error: " + e.getMessage();
+            exchange.sendResponseHeaders(200, response.length());
+            out.write(response.getBytes());
+            out.close();
+            return;
         }
+
+        double startTime = System.currentTimeMillis();
+        double result = runConfiguration(conf);
+        double runtime = System.currentTimeMillis() - startTime;
+
+        DecimalFormat dd = new DecimalFormat("#0.00000");
+
+        String response = "{" +
+                    "\"result\": " + dd.format(result) + "," +
+                    "\"runtime\": " + dd.format(runtime) +
+                "}";
+
+        System.out.println(response);
+
+        OutputStream out = exchange.getResponseBody();
+        exchange.sendResponseHeaders(200, response.length());
+        out.write(response.getBytes());
+        out.close();
     }
 
     private static JsonConf readJSON(String json) {
@@ -94,19 +110,34 @@ public class ExtensionServer {
     private static double runConfiguration(JsonConf conf) {
         BayesianNetwork bn = BayesianNetworkFactory.createCNX();
 
+        System.out.println("Running configuration...");
+
         Node node = bn.getNode(conf.getQueryNode());
+        System.out.println("Query node: " + node.getLabel());
+
         int value = Parser.truthValueToInt(conf.getQueryValue());
-        ArrayList<Evidence> evidence = Parser.parseEvidence(conf.getEvidence().split(" "), bn);
+        System.out.println("Query value: " + value);
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        if (!conf.getEvidence().equals(""))  {
+            evidence = Parser.parseEvidence(conf.getEvidence().split(" "), bn);
+        }
+        System.out.println("Evidence: " + evidence);
 
         Order order;
-        if (conf.getOrder() == "Custom") {
-            order = Parser.orderFromInput(conf.getProvidedOrder().split(","), bn);
+        if (conf.getOrder().equals("Custom")) {
+            order = Parser.orderFromInput(conf.getProvidedOrder(), bn);
+            System.out.println("Order: " + order);
         } else {
             OrderAlgo orderAlgo = OrderAlgoFactory.create(conf.getOrder());
             order = orderAlgo.findOrder(bn, node);
+            System.out.println(conf.getOrder() + " " + order);
         }
 
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
-        return ve.getResult(node, order, value, evidence);
+        double result = ve.getResult(node, order, value, evidence);
+
+        System.out.println("Result: " + result);
+        return result;
     }
 }

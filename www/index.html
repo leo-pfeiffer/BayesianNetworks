@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <title>CNX Expert System</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
 </head>
 <body>
 <div id="app" class="container">
@@ -33,15 +38,12 @@
                             <div class="control">
                                 <div class="select">
                                     <select v-model="queryNode">
-                                        <option>A</option>
-                                        <option>B</option>
-                                        <option>C</option>
+                                        <option v-for="item in values.queryNodes" v-bind:value="item.value" name="node">{{item.name}}</option>
                                     </select>
                                 </div>
                                 <div class="select">
                                     <select v-model="queryValue">
-                                        <option value="T">True</option>
-                                        <option value="F">False</option>
+                                        <option v-bind:value="item.value" v-for="item in truthValuesForQueryNode()">{{item.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -55,10 +57,23 @@
                     </div>
                     <div class="field-body">
                         <div class="field is-expanded">
-                            <div class="field has-addons">
-                                <p class="control is-expanded">
-                                    <input class="input" type="text" placeholder="Evidence" v-model="evidence">
-                                </p>
+                            <div class="field has-addons columns is-multiline">
+                                <div class="control column is-one-third" v-for="item of values.queryNodes"
+                                     v-bind="{'disabled': item.value === queryNode}">
+                                    <p>{{item.name}}</p>
+                                    <label class="radio" >
+                                        <input type="radio" v-bind:name="item.value" v-bind:value="item.truthValues[0].value"
+                                               v-bind="{'disabled': item.value === queryNode}"
+                                               v-model="item.evidence">
+                                        {{item.truthValues[0].name}}
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" v-bind:name="item.value" v-bind:value="item.truthValues[1].value"
+                                               v-bind="{'disabled': item.value === queryNode}"
+                                               v-model="item.evidence">
+                                        {{item.truthValues[1].name}}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -73,23 +88,33 @@
                             <div class="control">
                                 <div class="select is-fullwidth">
                                     <select v-model="order">
-                                        <option value="MC">Max Cardinality</option>
-                                        <option value="GME">Greedy Min Edges</option>
-                                        <option value="Custom">Custom</option>
+                                        <option v-bind:value="item.value" v-for="item of values.orderTypes">{{item.name}}</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="field is-expanded">
-                            <div class="field has-addons">
-                                <p class="control is-expanded">
-                                    <input v-bind="{'disabled': !customOrder}" v-model="providedOrder"
-                                           class="input" type="text" placeholder="Order">
-                                </p>
-                            </div>
+                    </div>
+                </div>
+
+                <div class="field is-horizontal" v-if="customOrder">
+                    <div class="field-label is-normal">
+                        <label class="label"></label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field is-grouped">
+                            <draggable :list="values.orderNames" class="list-group control is-expanded" handle=".handle">
+                                <div class="list-group-item button has-addons is-fullwidth"
+                                     v-for="(element, idx) in values.orderNames"
+                                     v-if="element.value !== queryNode"
+                                     :key="element.name">
+                                    <i class="fa fa-align-justify handle icon is-medium"></i>
+                                    <span class="text">{{ element.name }}</span>
+                                </div>
+                            </draggable>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="field is-horizontal">
                     <div class="field-body">
@@ -105,8 +130,8 @@
 
                 <hr>
 
-                <div class="box">
-                    Outputs ...
+                <div class="box" v-if="output !== undefined && output !== null && output !== ''">
+                    Result: {{output}}, Runtime: {{runtime}} ms
                 </div>
 
             </div>
@@ -120,37 +145,112 @@
         new Vue({
             el: '#app',
             data: {
-                message: 'Hello Vue!',
+                myArray: [{name: "hello", id:1}, {name: "world", id:2}, {name: "!!!!!!", id:3}, {name: "????????", id:4}],
+                output: "",
+                runtime: "",
                 order: "",
-                providedOrder: "",
                 queryNode: "",
                 queryValue: "",
-                evidence: ""
+                values: {
+                    queryNodes: [
+                        {name: "Holiday", value: "Hol", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                        {name: "Client Activity", value: "C_A", truthValues: [{name: "Risky", value: "T"}, {name: "OK", value: "F"}], evidence: ""},
+                        {name: "Maintenance", value: "Mai", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                        {name: "Maintenance Info", value: "M_I", truthValues: [{name: "Outdated", value: "T"}, {name: "Updated", value: "F"}], evidence: ""},
+                        {name: "Firewall", value: "Fir", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                        {name: "DDoS Risk", value: "D_R", truthValues: [{name: "High", value: "T"}, {name: "Low", value: "F"}], evidence: ""},
+                        {name: "Logged", value: "Log", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                        {name: "Website", value: "Web", truthValues: [{name: "Risky", value: "T"}, {name: "OK", value: "F"}], evidence: ""},
+                        {name: "Blocked", value: "Blo", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                        {name: "Alert", value: "Ale", truthValues: [{name: "True", value: "T"}, {name: "False", value: "F"}], evidence: ""},
+                    ],
+                    orderTypes: [
+                        {name: "Max Cardinality", value: "MC"},
+                        {name: "Greedy Min Edges", value: "GME"},
+                        {name: "Custom", value: "Custom"}
+                    ],
+                    orderNames: [
+                        {id: 1, name: "Holiday", value: "Hol"},
+                        {id: 2, name: "Client Activity", value: "C_A"},
+                        {id: 3, name: "Maintenance", value: "Mai"},
+                        {id: 4, name: "Maintenance Info", value: "M_I"},
+                        {id: 5, name: "Firewall", value: "Fir"},
+                        {id: 6, name: "DDoS Risk", value: "D_R"},
+                        {id: 7, name: "Logged", value: "Log"},
+                        {id: 8, name: "Website", value: "Web"},
+                        {id: 9, name: "Blocked", value: "Blo"},
+                        {id: 10, name: "Alert", value: "Ale"},
+                    ]
+                }
             },
             computed: {
                 customOrder: function() {
                     return this.order === "Custom"
-                }
+                },
             },
             methods: {
+                getEvidence: function() {
+                    return this.values.queryNodes
+                        .filter(e => e.value !== this.queryNode)
+                        .filter(e => e.evidence !== "")
+                        .map(e => `${e.value}:${e.evidence}`)
+                        .join(" ")
+                },
+                getOrder: function() {
+                    return this.values.orderNames
+                        .filter(e => e.value !== this.queryNode)
+                        .map(e => e.value)
+                },
                 submit: function() {
+
+                    // make sure input is available
+                    if (this.values.queryNodes.map(e => e.value).indexOf(this.queryNode) === -1) {
+                        alert("Please select query node.");
+                        return;
+                    }
+                    if (this.queryValue === "") {
+                        alert("Please select query value.");
+                        return;
+                    }
+                    if (this.order === "") {
+                        alert("Please select an order.");
+                        return;
+                    }
+
                     const obj = {
                         queryNode: this.queryNode,
                         queryValue: this.queryValue,
-                        evidence: this.evidence,
+                        evidence: this.getEvidence(),
                         order: this.order,
-                        providedOrder: this.providedOrder
+                        providedOrder: this.getOrder()
                     }
+                    console.log(obj)
                     this.post(obj)
                 },
-                post: function(data) {
-                    fetch("/", {
+                post: async function(data) {
+                    const response = await fetch("/", {
                         method: "POST",
                         headers: {"content-type": "application/json"},
                         body: JSON.stringify(data)
                     }).then(res => res.json())
-                        .then(jsn => console.log(jsn))
-                }
+                        .then(jsn => {
+                            console.log(jsn)
+                            return jsn
+                        })
+                        .catch(console.error)
+
+                    this.output = response.result
+                    this.runtime = response.runtime
+                    console.log(response, this.output, this.runtime)
+                },
+                truthValuesForQueryNode: function() {
+                    for (item of this.values.queryNodes) {
+                        if (item.value === this.queryNode) {
+                            return item.truthValues;
+                        }
+                    }
+                    return []
+                },
             }
         })
     }
@@ -165,13 +265,19 @@
         margin-top: 60px;
     }
 
-    .card-footer-item {
-        cursor: pointer;
-    }
-
     .card {
         margin-left: 50px;
         margin-right: 50px;
     }
+
+    .hero-body {
+        padding-top: 5px;
+        padding-bottom: 35px;
+    }
+
+    .list-group-item {
+        justify-content: left;
+    }
+
 </style>
 </html>

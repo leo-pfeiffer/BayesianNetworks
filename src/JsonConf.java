@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class JsonConf implements Serializable {
 
@@ -6,14 +7,14 @@ public class JsonConf implements Serializable {
     private final String queryValue;
     private final String evidence;
     private final String order;
-    private final String providedOrder;
+    private final String[] providedOrder;
 
     public JsonConf(
             String queryNode,
             String queryValue,
             String evidence,
             String order,
-            String providedOrder) {
+            String[] providedOrder) {
         this.queryNode = queryNode;
         this.queryValue = queryValue;
         this.evidence = evidence;
@@ -37,7 +38,7 @@ public class JsonConf implements Serializable {
         return order;
     }
 
-    public String getProvidedOrder() {
+    public String[] getProvidedOrder() {
         return providedOrder;
     }
 }
