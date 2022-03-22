@@ -34,9 +34,9 @@ public class A3main {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
                 String[] query = getQueriedNode(sc);
-                Node variableNode = getNode(query[0], bn);
-                int numericValue = truthValueToInt(query[1]);
-                Order order = orderFromInput(getOrder(sc), bn);
+                Node variableNode = Parser.getNode(query[0], bn);
+                int numericValue = Parser.truthValueToInt(query[1]);
+                Order order = Parser.orderFromInput(getOrder(sc), bn);
 
                 // execute query of p(variable=value) with given order of elimination
                 VariableElimination ve = new VariableElimination(bn);
@@ -50,9 +50,9 @@ public class A3main {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
                 String[] query = getQueriedNode(sc);
-                Node variableNode = getNode(query[0], bn);
-                int numericValue = truthValueToInt(query[1]);
-                Order order = orderFromInput(getOrder(sc), bn);
+                Node variableNode = Parser.getNode(query[0], bn);
+                int numericValue = Parser.truthValueToInt(query[1]);
+                Order order = Parser.orderFromInput(getOrder(sc), bn);
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
                 // execute query of p(variable=value|evidence) with given order of elimination
@@ -66,8 +66,8 @@ public class A3main {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
                 String[] query = getQueriedNode(sc);
-                Node variableNode = getNode(query[0], bn);
-                int numericValue = truthValueToInt(query[1]);
+                Node variableNode = Parser.getNode(query[0], bn);
+                int numericValue = Parser.truthValueToInt(query[1]);
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
                 // generate elimination order: orderAlgo either MC or GME
@@ -102,22 +102,14 @@ public class A3main {
     private static ArrayList<Evidence> getEvidence(Scanner sc, BayesianNetwork bn) {
 
         System.out.println("Evidence:");
-        ArrayList<Evidence> evidence = new ArrayList<>();
         String[] line = sc.nextLine().split(" ");
 
-        for (String st : line) {
-            String[] ev = st.split(":");
-            int truthValue = truthValueToInt(ev[1]);
-            Node node = getNode(ev[0], bn);
-            evidence.add(new Evidence(node, truthValue));
-        }
-        return evidence;
+        return Parser.parseEvidence(line, bn);
     }
 
 
     //method to obtain the order from the user
     private static String[] getOrder(Scanner sc) {
-
         System.out.println("Order:");
         return sc.nextLine().split(",");
     }
@@ -125,49 +117,14 @@ public class A3main {
 
     //method to obtain the queried node from the user
     private static String[] getQueriedNode(Scanner sc) {
-
         System.out.println("Query:");
-
         return sc.nextLine().split(":");
-
     }
 
     //method to format and print the result
     private static void printResult(double result) {
-
         DecimalFormat dd = new DecimalFormat("#0.00000");
         System.out.println(dd.format(result));
-    }
-
-    private static int truthValueToInt(String value) {
-        switch (value) {
-            case "T":
-                return 1;
-            case "F":
-                return 0;
-            default:
-                throw new IllegalArgumentException("Invalid value: " + value);
-        }
-    }
-
-    private static Order orderFromInput(String[] orderRaw, BayesianNetwork bn) {
-        Order order = new Order();
-        for (String n : orderRaw) {
-            Node node = bn.getNode(n);
-            if (node == null) {
-                throw new IllegalArgumentException("Invalid node: " + n);
-            }
-            order.add(node);
-        }
-        return order;
-    }
-
-    private static Node getNode(String variable, BayesianNetwork bn) {
-        Node variableNode = bn.getNode(variable);
-        if (variableNode == null) {
-            throw new IllegalArgumentException("Invalid node: " + variable);
-        }
-        return variableNode;
     }
 
 }
