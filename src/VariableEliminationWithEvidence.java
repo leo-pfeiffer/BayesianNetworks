@@ -19,6 +19,7 @@ public class VariableEliminationWithEvidence extends VariableElimination {
 
     public Double getResult(Node node, Order order, int truthValue, ArrayList<Evidence> evidence) {
         pruneOrder(order, node, evidence);
+        // System.out.println("Pruned " + order);
         List<Factor> factors = createFactorList(order, node);
         projectEvidence(factors, evidence);
         combineFactors(order, factors);
@@ -30,18 +31,24 @@ public class VariableEliminationWithEvidence extends VariableElimination {
         List<Node> toRemove = new ArrayList<>();
         for (Node n : order) {
 
-            // check if node is ancestor of evidence node
+            // is variable ancestor of queried node?
+            boolean queryAncestor = node.hasAncestor(n);
+
+            // is variable ancestor of an evidenced node?
             boolean evidenceAncestor = false;
             for (Evidence e : evidence) {
+
                 // retain node if it is an ancestor of an evidence node but not the NODE itself
                 if (!e.getNode().equals(node) && (e.getNode().equals(n) || e.getNode().hasAncestor(n))) {
-                    evidenceAncestor = true;
-                    break;
+                    if (e.getNode().hasAncestor(node)) {
+                        evidenceAncestor = true;
+                        break;
+                    }
                 }
             }
 
             // remove n if n is neither ancestor of node nor of evidence
-            if (!node.hasAncestor(n) && !evidenceAncestor) {
+            if (!(queryAncestor || evidenceAncestor)) {
                 toRemove.add(n);
             }
         }
@@ -63,7 +70,10 @@ public class VariableEliminationWithEvidence extends VariableElimination {
                     break;
                 }
             }
-             if (evFactor == null) throw new AssertionError("This shouldn't happen.");
+             if (evFactor == null) {
+                 continue;
+                 // throw new AssertionError("This shouldn't happen.");
+             }
 
             // set the probabilities for the evidence
             FactorColumn evCol = evFactor.getColumnByNode(e.getNode());
