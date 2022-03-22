@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
         FactorTest.class,
         InducedGraphTest.class,
         NodeTest.class,
-        StacsChecksTest.class,
+        IntegrationTest.class,
         VariableEliminationTest.class,
         VariableEliminationWithEvidenceTest.class
 })

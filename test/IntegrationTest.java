@@ -6,9 +6,9 @@ import bayesiannetwork.BayesianNetworkFactory;
 import org.junit.Test;
 
 /**
- * This is a JUnit port of the provided stacschecks, to which I added tests using the calculated orders.
+ * This class tests full calculations of the probabilities. Some tests are ported from the stacscheck tests.
  * */
-public class StacsChecksTest {
+public class IntegrationTest {
 
     @Test
     public void testBNAP2q1() {
@@ -439,5 +439,132 @@ public class StacsChecksTest {
         double result2 = ve.getResult(bn.getNode("U"), order2, 1, evidence);
         assertEquals(0.34204, result2, 0.001);
     }
+
+    @Test
+    public void testBNBedge1() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNB();
+        GreedyMinEdges gme = new GreedyMinEdges();
+        Order order = gme.findOrder(bn, bn.getNode("J"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("K"), 1));
+        evidence.add(new Evidence(bn.getNode("L"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("J"), order, 1, evidence);
+        assertEquals(0.06338, result, 0.001);
+    }
+
+    @Test
+    public void testCNX1Diagnostic() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("M_I"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Hol"), 0));
+        evidence.add(new Evidence(bn.getNode("C_A"), 1));
+        evidence.add(new Evidence(bn.getNode("Fir"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("M_I"), order, 1, evidence);
+        assertEquals(0.01129, result, 0.001);
+    }
+
+    @Test
+    public void testCNX2Predictive() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("Ale"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("D_R"), 1));
+        evidence.add(new Evidence(bn.getNode("Log"), 1));
+        evidence.add(new Evidence(bn.getNode("Fir"), 1));
+        evidence.add(new Evidence(bn.getNode("Blo"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("Ale"), order, 1, evidence);
+        assertEquals(0.95, result, 0.001);
+    }
+
+
+    @Test
+    public void testCNX3Predictive() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("Ale"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Hol"), 1));
+        evidence.add(new Evidence(bn.getNode("C_A"), 1));
+        evidence.add(new Evidence(bn.getNode("Mai"), 1));
+        evidence.add(new Evidence(bn.getNode("M_I"), 1));
+        evidence.add(new Evidence(bn.getNode("Web"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("Ale"), order, 1, evidence);
+        assertEquals(0.5225, result, 0.001);
+    }
+
+    @Test
+    public void testCNX4Diagnostic() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("C_A"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Ale"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("C_A"), order, 1, evidence);
+        assertEquals(0.06314, result, 0.001);
+    }
+
+    @Test
+    public void testCNX5Diagnostic() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("Mai"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Ale"), 1));
+        evidence.add(new Evidence(bn.getNode("M_I"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("Mai"), order, 1, evidence);
+        assertEquals(0.1, result, 0.001);
+    }
+
+    @Test
+    public void testCNX6Diagnostic() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("C_A"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Ale"), 1));
+        evidence.add(new Evidence(bn.getNode("D_R"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("C_A"), order, 1, evidence);
+        assertEquals(0.05287, result, 0.001);
+    }
+
+    @Test
+    public void testCNX7Diagnostic() {
+        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
+        MaxCardinality mc = new MaxCardinality();
+        Order order = mc.findOrder(bn, bn.getNode("Mai"));
+
+        ArrayList<Evidence> evidence = new ArrayList<>();
+        evidence.add(new Evidence(bn.getNode("Ale"), 1));
+        evidence.add(new Evidence(bn.getNode("Fir"), 1));
+
+        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        double result = ve.getResult(bn.getNode("Mai"), order, 1, evidence);
+        assertEquals(0.00445, result, 0.001);
+    }
+
 
 }
