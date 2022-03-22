@@ -84,19 +84,6 @@ public class A3main {
         sc.close();
     }
 
-    //method to obtain the evidence from the user
-    private static ArrayList<String[]> getEvidence(Scanner sc) {
-
-        System.out.println("Evidence:");
-        ArrayList<String[]> evidence = new ArrayList<>();
-        String[] line = sc.nextLine().split(" ");
-
-        for (String st : line) {
-            String[] ev = st.split(":");
-            evidence.add(ev);
-        }
-        return evidence;
-    }
 
     //method to obtain the evidence from the user
     private static ArrayList<Evidence> getEvidence(Scanner sc, BayesianNetwork bn) {
