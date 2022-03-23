@@ -24,6 +24,7 @@ public class ExtensionServer {
         HttpContext context = server.createContext("/");
         context.setHandler(ExtensionServer::handleRequest);
         server.start();
+        System.out.println("Listening on port 8080. Go to http://localhost:8080/...");
     }
 
     private static void handleRequest(HttpExchange exchange) throws IOException {
@@ -64,7 +65,7 @@ public class ExtensionServer {
             }
             br.close();
             String confString = sb.toString();
-            System.out.println(confString);
+            System.out.println("Received: " + confString);
             conf = readJSON(confString);
             assert conf != null;
         } catch (IOException e) {
@@ -88,7 +89,8 @@ public class ExtensionServer {
                     "\"runtime\": " + dd.format(runtime) +
                 "}";
 
-        System.out.println(response);
+        System.out.println("Result: " + dd.format(result));
+        System.out.println("Runtime: " + dd.format(runtime) + "\n");
 
         OutputStream out = exchange.getResponseBody();
         exchange.sendResponseHeaders(200, response.length());
@@ -109,8 +111,6 @@ public class ExtensionServer {
 
     private static double runConfiguration(JsonConf conf) {
         BayesianNetwork bn = BayesianNetworkFactory.createCNX();
-
-        System.out.println("Running configuration...");
 
         Node node = bn.getNode(conf.getQueryNode());
         System.out.println("Query node: " + node.getLabel());
@@ -135,9 +135,7 @@ public class ExtensionServer {
         }
 
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
-        double result = ve.getResult(node, order, value, evidence);
 
-        System.out.println("Result: " + result);
-        return result;
+        return ve.getResult(node, order, value, evidence);
     }
 }
