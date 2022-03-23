@@ -548,7 +548,7 @@ public class IntegrationTest {
 
         VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
         double result = ve.getResult(bn.getNode("C_A"), order, 1, evidence);
-        assertEquals(0.05287, result, 0.001);
+        assertEquals(0.05827, result, 0.001);
     }
 
     @Test
