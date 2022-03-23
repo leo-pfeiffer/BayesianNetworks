@@ -35,6 +35,10 @@ evaluation:
 	@java -cp $(CLASSPATH):. ExperimentReaderWriter
 	@python3 evaluation/evaluation.py
 
+.PHONY: serve
+# Run the server for the expert system
+serve:
+	@java -cp $(CLASSPATH):. ExpertSystemServer
 
 .PHONY: help
 # Found here: https://stackoverflow.com/a/35730928/12168211
