@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.Factor;
 import bayesiannetwork.FactorColumn;
 import bayesiannetwork.FactorRowKey;
 import bayesiannetwork.Node;
+import utils.SetUtils;
 
 public class VariableEliminationWithEvidence extends VariableElimination {
 
@@ -19,7 +21,7 @@ public class VariableEliminationWithEvidence extends VariableElimination {
 
     public Double getResult(Node node, Order order, int truthValue, ArrayList<Evidence> evidence) {
         pruneOrder(order, node, evidence);
-        // System.out.println("Pruned " + order);
+        System.out.println("Pruned " + order);
         List<Factor> factors = createFactorList(order, node);
         projectEvidence(factors, evidence);
         combineFactors(order, factors);
@@ -27,7 +29,7 @@ public class VariableEliminationWithEvidence extends VariableElimination {
         return extract(factors, node, truthValue);
     }
 
-    protected void pruneOrder(Order order, Node node, ArrayList<Evidence> evidence) {
+    protected void pruneOrder2(Order order, Node node, ArrayList<Evidence> evidence) {
         List<Node> toRemove = new ArrayList<>();
         for (Node n : order) {
 
@@ -49,6 +51,25 @@ public class VariableEliminationWithEvidence extends VariableElimination {
 
             // remove n if n is neither ancestor of node nor of evidence
             if (!(queryAncestor || evidenceAncestor)) {
+                toRemove.add(n);
+            }
+        }
+        order.removeAll(toRemove);
+        order.remove(node);
+    }
+
+    protected void pruneOrder(Order order, Node node, ArrayList<Evidence> evidence) {
+        HashSet<Node> keep = node.getAllAncestors();
+        for (Evidence e : evidence) {
+            HashSet<Node> evidenceAncestors = e.getNode().getAllAncestors();
+            if (SetUtils.intersection(keep, evidenceAncestors).size() > 0 || evidenceAncestors.contains(node)) {
+                keep.addAll(evidenceAncestors);
+                keep.add(e.getNode());
+            }
+        }
+        HashSet<Node> toRemove = new HashSet<>();
+        for (Node n : order) {
+            if (!keep.contains(n)) {
                 toRemove.add(n);
             }
         }

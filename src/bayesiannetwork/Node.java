@@ -1,6 +1,7 @@
 package bayesiannetwork;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -96,6 +97,18 @@ public class Node {
             }
         }
         return false;
+    }
+
+    /**
+     * Depth first search to create a set of all nodes that are ancestors of this node.
+     * */
+    public HashSet<Node> getAllAncestors() {
+        HashSet<Node> ancestors = new HashSet<>();
+        for (Node parent : parents) {
+            ancestors.add(parent);
+            ancestors.addAll(parent.getAllAncestors());
+        }
+        return ancestors;
     }
 
     @Override
