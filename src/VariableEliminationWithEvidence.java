@@ -21,7 +21,6 @@ public class VariableEliminationWithEvidence extends VariableElimination {
 
     public Double getResult(Node node, Order order, int truthValue, ArrayList<Evidence> evidence) {
         pruneOrder(order, node, evidence);
-        System.out.println("Pruned " + order);
         List<Factor> factors = createFactorList(order, node);
         projectEvidence(factors, evidence);
         combineFactors(order, factors);
@@ -29,50 +28,31 @@ public class VariableEliminationWithEvidence extends VariableElimination {
         return extract(factors, node, truthValue);
     }
 
-    protected void pruneOrder2(Order order, Node node, ArrayList<Evidence> evidence) {
-        List<Node> toRemove = new ArrayList<>();
-        for (Node n : order) {
-
-            // is variable ancestor of queried node?
-            boolean queryAncestor = node.hasAncestor(n);
-
-            // is variable ancestor of an evidenced node?
-            boolean evidenceAncestor = false;
-            for (Evidence e : evidence) {
-
-                // retain node if it is an ancestor of an evidence node but not the NODE itself
-                if (!e.getNode().equals(node) && (e.getNode().equals(n) || e.getNode().hasAncestor(n))) {
-                    if (e.getNode().hasAncestor(node)) {
-                        evidenceAncestor = true;
-                        break;
-                    }
-                }
-            }
-
-            // remove n if n is neither ancestor of node nor of evidence
-            if (!(queryAncestor || evidenceAncestor)) {
-                toRemove.add(n);
-            }
-        }
-        order.removeAll(toRemove);
-        order.remove(node);
-    }
-
+    /**
+     * General order pruning algorithm.
+     * */
     protected void pruneOrder(Order order, Node node, ArrayList<Evidence> evidence) {
+        // set of nodes to keep in the order
         HashSet<Node> keep = node.getAllAncestors();
+
         for (Evidence e : evidence) {
             HashSet<Node> evidenceAncestors = e.getNode().getAllAncestors();
+
+            // if the evidence node and the query node have ancestors in common, keep the evidence node ancestors
             if (SetUtils.intersection(keep, evidenceAncestors).size() > 0 || evidenceAncestors.contains(node)) {
                 keep.addAll(evidenceAncestors);
                 keep.add(e.getNode());
             }
         }
+
+        // remove all nodes not in keep (preserving the order)
         HashSet<Node> toRemove = new HashSet<>();
         for (Node n : order) {
             if (!keep.contains(n)) {
                 toRemove.add(n);
             }
         }
+
         order.removeAll(toRemove);
         order.remove(node);
     }
