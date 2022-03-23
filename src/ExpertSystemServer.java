@@ -17,12 +17,12 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import com.google.gson.Gson;
 
-public class ExtensionServer {
+public class ExpertSystemServer {
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         HttpContext context = server.createContext("/");
-        context.setHandler(ExtensionServer::handleRequest);
+        context.setHandler(ExpertSystemServer::handleRequest);
         server.start();
         System.out.println("Listening on port 8080. Go to http://localhost:8080/...");
     }
