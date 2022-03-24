@@ -23,6 +23,7 @@ public abstract class BayesianNetworkFactory {
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createBNA() {
         BayesianNetwork bn = new BayesianNetwork();
+        bn.setName("BNA");
 
         // nodes
         Node a = bn.addNode("A");
@@ -50,6 +51,7 @@ public abstract class BayesianNetworkFactory {
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createBNB() {
         BayesianNetwork bn = new BayesianNetwork();
+        bn.setName("BNB");
 
         // nodes
         Node j = bn.addNode("J");
@@ -83,6 +85,7 @@ public abstract class BayesianNetworkFactory {
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createBNC() {
         BayesianNetwork bn = new BayesianNetwork();
+        bn.setName("BNC");
 
         // nodes
         Node p = bn.addNode("P");
@@ -121,6 +124,7 @@ public abstract class BayesianNetworkFactory {
     @SuppressWarnings("DuplicatedCode")
     public static BayesianNetwork createCNX() {
         BayesianNetwork bn = new BayesianNetwork();
+        bn.setName("CNX");
 
         // nodes
         Node holiday = bn.addNode("Hol");

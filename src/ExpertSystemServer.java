@@ -7,10 +7,7 @@ import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.BayesianNetworkFactory;
-import bayesiannetwork.Node;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
@@ -78,7 +75,7 @@ public class ExpertSystemServer {
             return;
         }
 
-        Agent agent = runConfiguration(conf);
+        Agent agent = JsonConf.runConfiguration(conf, BayesianNetworkFactory.createCNX());
         double result = agent.result;
         long runtime = agent.tracker.getRunTime();
 
@@ -107,37 +104,5 @@ public class ExpertSystemServer {
             ex.printStackTrace();
             return null;
         }
-    }
-
-    private static Agent runConfiguration(JsonConf conf) {
-        BayesianNetwork bn = BayesianNetworkFactory.createCNX();
-
-        Node node = bn.getNode(conf.getQueryNode());
-        System.out.println("Query node: " + node.getLabel());
-
-        int value = Parser.truthValueToInt(conf.getQueryValue());
-        System.out.println("Query value: " + value);
-
-        ArrayList<Evidence> evidence = new ArrayList<>();
-        if (!conf.getEvidence().equals(""))  {
-            evidence = Parser.parseEvidence(conf.getEvidence().split(" "), bn);
-        }
-        System.out.println("Evidence: " + evidence);
-
-        Order order;
-        if (conf.getOrder().equals("Custom")) {
-            order = Parser.orderFromInput(conf.getProvidedOrder(), bn);
-            System.out.println("Order: " + order);
-        } else {
-            OrderAlgo orderAlgo = OrderAlgoFactory.create(conf.getOrder());
-            order = orderAlgo.findOrder(bn, node);
-            System.out.println(conf.getOrder() + " " + order);
-        }
-
-        AgentWithEvidence ve = new AgentWithEvidence(bn);
-
-        ve.getResult(node, order, value, evidence);
-
-        return ve;
     }
 }

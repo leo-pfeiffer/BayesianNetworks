@@ -20,6 +20,11 @@ public class BayesianNetwork {
      * */
     private final List<Node> nodes = new ArrayList<>();
 
+    /**
+     * Name of the network (nullable).
+     * */
+    private String name;
+
     public Map<String, Node> getNodeMap() {
         return nodeMap;
     }
@@ -134,5 +139,13 @@ public class BayesianNetwork {
         }
 
         return sb.toString();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
