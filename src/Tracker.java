@@ -11,14 +11,14 @@ public class Tracker {
      * First method to call during tracking.
      * */
     public void startTracker() {
-        this.startTime = System.currentTimeMillis();
+        this.startTime = System.nanoTime();
     }
 
     /**
      * Last method to call during tracking.
      * */
     public void stopTracker() {
-        this.runTime = System.currentTimeMillis() - this.startTime;
+        this.runTime = System.nanoTime() - this.startTime;
     }
 
     public long getRunTime() {
@@ -31,7 +31,8 @@ public class Tracker {
 
     public void trackMaxFactorSize(Collection<Factor> factors) {
         for (Factor factor : factors) {
-            int size = factor.getNumRows() * factor.getColumns().size();
+            // int size = factor.getNumRows() * factor.getColumns().size();
+            int size = factor.getColumns().size();
             if (size > maxFactorSize) {
                 maxFactorSize = size;
             }

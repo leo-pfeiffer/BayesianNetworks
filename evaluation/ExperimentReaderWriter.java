@@ -59,22 +59,36 @@ public class ExperimentReaderWriter {
                 for (int i = 0; i < iterations; i++) {
                     Node queryNode = getRandomNode(bn);
 
-                    // diagnostic query: query node is root node
+                    // diagnostic query: query node has children
                     if (diagnostic) {
-                        while (queryNode.getParents().size() != 0) {
+                        while (queryNode.getChildren().size() == 0) {
                             queryNode = getRandomNode(bn);
                         }
                     }
-                    // predictive query: query node is leaf node
+                    // predictive query: query node has parents
                     else {
-                        while (queryNode.getChildren().size() != 0) {
+                        while (queryNode.getParents().size() == 0) {
                             queryNode = getRandomNode(bn);
                         }
                     }
                     int numEvidence = (int) (Math.random() * bn.getNodes().size() - 1);
                     StringBuilder evidence = new StringBuilder();
                     for (int j = 0; j < numEvidence; j++) {
+
+                        // diagnostic: evidence is a child of query node
                         Node evidenceNode = getRandomNode(bn, queryNode);
+                        if (diagnostic) {
+                            while (!evidenceNode.hasAncestor(queryNode)) {
+                                evidenceNode = getRandomNode(bn, queryNode);
+                            }
+                        }
+                        // predictive: evidence is ancestor of query node
+                        else {
+                            while (!queryNode.hasAncestor(evidenceNode)) {
+                                evidenceNode = getRandomNode(bn, queryNode);
+                            }
+                        }
+
                         evidence.append(evidenceNode.getLabel()).append(":T");
                         if (j < numEvidence - 1) {
                             evidence.append(" ");
