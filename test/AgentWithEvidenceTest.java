@@ -7,7 +7,7 @@ import bayesiannetwork.Factor;
 import bayesiannetwork.Node;
 import org.junit.Test;
 
-public class VariableEliminationWithEvidenceTest {
+public class AgentWithEvidenceTest {
 
     /**
      * Using example L12 p.26
@@ -25,7 +25,7 @@ public class VariableEliminationWithEvidenceTest {
         ArrayList<Evidence> evidence = new ArrayList<>();
         evidence.add(new Evidence(bn.getNode("O"), 1));
 
-        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        AgentWithEvidence ve = new AgentWithEvidence(bn);
 
         ve.pruneOrder(order, bn.getNode("K"), evidence);
 
@@ -52,7 +52,7 @@ public class VariableEliminationWithEvidenceTest {
         ArrayList<Evidence> evidence = new ArrayList<>();
         evidence.add(new Evidence(bn.getNode("O"), 1));
 
-        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        AgentWithEvidence ve = new AgentWithEvidence(bn);
 
         int truthValue = 1;
         Node node = bn.getNode("K");
@@ -82,7 +82,7 @@ public class VariableEliminationWithEvidenceTest {
         factors.add(f1);
         factors.add(f2);
 
-        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(null);
+        AgentWithEvidence ve = new AgentWithEvidence(null);
         ve.projectEvidence(factors, evidence);
 
         double[] expected = {0.5, 0, 0.5, 0};

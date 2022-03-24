@@ -78,9 +78,9 @@ public class ExpertSystemServer {
             return;
         }
 
-        double startTime = System.currentTimeMillis();
-        double result = runConfiguration(conf);
-        double runtime = System.currentTimeMillis() - startTime;
+        Agent agent = runConfiguration(conf);
+        double result = agent.result;
+        long runtime = agent.tracker.getRunTime();
 
         DecimalFormat dd = new DecimalFormat("#0.00000");
 
@@ -109,7 +109,7 @@ public class ExpertSystemServer {
         }
     }
 
-    private static double runConfiguration(JsonConf conf) {
+    private static Agent runConfiguration(JsonConf conf) {
         BayesianNetwork bn = BayesianNetworkFactory.createCNX();
 
         Node node = bn.getNode(conf.getQueryNode());
@@ -134,8 +134,10 @@ public class ExpertSystemServer {
             System.out.println(conf.getOrder() + " " + order);
         }
 
-        VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+        AgentWithEvidence ve = new AgentWithEvidence(bn);
 
-        return ve.getResult(node, order, value, evidence);
+        ve.getResult(node, order, value, evidence);
+
+        return ve;
     }
 }

@@ -6,7 +6,7 @@ import bayesiannetwork.Factor;
 import bayesiannetwork.Node;
 import org.junit.Test;
 
-public class VariableEliminationTest {
+public class AgentTest {
 
     /**
      * Test on example from lecture slides (L11, p.46)
@@ -21,7 +21,7 @@ public class VariableEliminationTest {
         a.getTable().setProbabilities(0.1, 0.9);
         b.getTable().setProbabilities(0.8, 0.2, 0.1, 0.9);
 
-        VariableElimination ve = new VariableElimination(null);
+        Agent ve = new Agent(null);
 
         Factor result = ve.pointWiseProduct(a.getTable(), b.getTable());
 
@@ -41,7 +41,7 @@ public class VariableEliminationTest {
         a.getTable().setProbabilities(0.1, 0.9);
         b.getTable().setProbabilities(0.8, 0.2, 0.1, 0.9);
 
-        VariableElimination ve = new VariableElimination(null);
+        Agent ve = new Agent(null);
 
         ArrayList<Factor> toSumOut = new ArrayList<>();
         toSumOut.add(a.getTable().copy());
@@ -66,7 +66,7 @@ public class VariableEliminationTest {
 
         table.setProbabilities(0.08, 0.09, 0.02, 0.81);
 
-        VariableElimination ve = new VariableElimination(null);
+        Agent ve = new Agent(null);
 
         Factor result = ve.marginalize(table, "A");
 
@@ -89,7 +89,7 @@ public class VariableEliminationTest {
         a.getTable().setProbabilities(0.1, 0.9);
         b.getTable().setProbabilities(0.8, 0.2, 0.1, 0.9);
 
-        VariableElimination ve = new VariableElimination(null);
+        Agent ve = new Agent(null);
         ArrayList<Factor> toSumOut = new ArrayList<>();
         toSumOut.add(a.getTable().copy());
         toSumOut.add(b.getTable().copy());
@@ -117,7 +117,7 @@ public class VariableEliminationTest {
         a.getTable().setProbabilities(0.1, 0.9);
         b.getTable().setProbabilities(0.8, 0.2, 0.1, 0.9);
 
-        VariableElimination ve = new VariableElimination(bn);
+        Agent ve = new Agent(bn);
         Order order = new Order();
         order.add(a);
         order.add(b);

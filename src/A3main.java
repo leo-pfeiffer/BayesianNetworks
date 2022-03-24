@@ -39,7 +39,7 @@ public class A3main {
                 Order order = Parser.orderFromInput(getOrder(sc), bn);
 
                 // execute query of p(variable=value) with given order of elimination
-                VariableElimination ve = new VariableElimination(bn);
+                Agent ve = new Agent(bn);
                 double result = ve.getResult(variableNode, order, numericValue);
 
                 printResult(result);
@@ -56,7 +56,7 @@ public class A3main {
                 ArrayList<Evidence> evidence = getEvidence(sc, bn);
 
                 // execute query of p(variable=value|evidence) with given order of elimination
-                VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+                AgentWithEvidence ve = new AgentWithEvidence(bn);
                 double result = ve.getResult(variableNode, order, numericValue, evidence);
                 printResult(result);
             }
@@ -75,7 +75,7 @@ public class A3main {
                 Order order = orderAlgo.findOrder(bn, variableNode);
                 System.out.println(order);
 
-                VariableEliminationWithEvidence ve = new VariableEliminationWithEvidence(bn);
+                AgentWithEvidence ve = new AgentWithEvidence(bn);
                 double result = ve.getResult(variableNode, order, numericValue, evidence);
                 printResult(result);
             }

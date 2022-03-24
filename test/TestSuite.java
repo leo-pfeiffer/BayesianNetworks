@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
         InducedGraphTest.class,
         NodeTest.class,
         IntegrationTest.class,
-        VariableEliminationTest.class,
-        VariableEliminationWithEvidenceTest.class
+        AgentTest.class,
+        AgentWithEvidenceTest.class
 })
 public class TestSuite { }

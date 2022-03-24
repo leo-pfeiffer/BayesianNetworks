@@ -13,12 +13,16 @@ import utils.SetUtils;
 /**
  * Class representing the Variable Elimination algorithm.
  * */
-public class VariableElimination {
+public class Agent {
 
     private final BayesianNetwork network;
 
-    public VariableElimination(BayesianNetwork network) {
+    protected final Tracker tracker;
+    protected Double result;
+
+    public Agent(BayesianNetwork network) {
         this.network = network;
+        this.tracker = new Tracker();
     }
 
     public BayesianNetwork getNetwork() {
@@ -29,10 +33,19 @@ public class VariableElimination {
      * Run the variable elimination algorithm.
      * */
     public Double getResult(Node node, Order order, int truthValue) {
+        tracker.startTracker();
         pruneOrder(order, node);
+
         List<Factor> factors = createFactorList(order, node);
+        tracker.trackMaxFactorSize(factors);
+
         combineFactors(order, factors);
-        return extract(factors, node, truthValue);
+        tracker.trackMaxFactorSize(factors);
+
+        Double result = extract(factors, node, truthValue);
+        tracker.stopTracker();
+        this.result = result;
+        return result;
 
     }
 
@@ -60,7 +73,7 @@ public class VariableElimination {
     }
 
     /**
-     * Create a list containing copies of the factors of all nodes of the network.
+     * Create a list containing copies of the factors of all nodes of the order.
      * */
     protected List<Factor> createFactorList(Order order, Node node) {
         List<Factor> factors = new ArrayList<>();

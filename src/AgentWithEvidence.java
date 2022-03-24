@@ -8,9 +8,9 @@ import bayesiannetwork.FactorRowKey;
 import bayesiannetwork.Node;
 import utils.SetUtils;
 
-public class VariableEliminationWithEvidence extends VariableElimination {
+public class AgentWithEvidence extends Agent {
 
-    public VariableEliminationWithEvidence(BayesianNetwork network) {
+    public AgentWithEvidence(BayesianNetwork network) {
         super(network);
     }
 
@@ -20,12 +20,23 @@ public class VariableEliminationWithEvidence extends VariableElimination {
     }
 
     public Double getResult(Node node, Order order, int truthValue, ArrayList<Evidence> evidence) {
+        tracker.startTracker();
         pruneOrder(order, node, evidence);
+
         List<Factor> factors = createFactorList(order, node);
+        tracker.trackMaxFactorSize(factors);
+
         projectEvidence(factors, evidence);
         combineFactors(order, factors);
+        tracker.trackMaxFactorSize(factors);
+
         joinNormalize(factors, node);
-        return extract(factors, node, truthValue);
+        tracker.trackMaxFactorSize(factors);
+
+        Double result = extract(factors, node, truthValue);
+        tracker.stopTracker();
+        this.result = result;
+        return result;
     }
 
     /**
