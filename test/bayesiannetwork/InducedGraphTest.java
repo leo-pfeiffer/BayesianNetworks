@@ -47,4 +47,19 @@ public class InducedGraphTest {
         assertEquals(4, g.getGraph().get(bn.getNode("V")).size());
         assertEquals(2, g.getGraph().get(bn.getNode("Z")).size());
     }
+
+    @Test
+    public void testToString() {
+        BayesianNetwork bn = BayesianNetworkFactory.createBNC();
+        List<Node> nodes = bn.getNodes();
+        InducedGraph g = new InducedGraph(nodes);
+        String expected = "P -> Q\n" +
+                "Q -> P, V, S, R\n" +
+                "R -> V, S, Q\n" +
+                "S -> Q, R, Z, U, V\n" +
+                "U -> S\n" +
+                "V -> Q, R, Z, S\n" +
+                "Z -> S, V\n";
+        assertEquals(expected, g.toString());
+    }
 }

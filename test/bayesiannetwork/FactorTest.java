@@ -98,4 +98,11 @@ public class FactorTest {
         assertEquals(0.7, table.getProbabilitiesByRowKey(key7), 0.0);
         assertEquals(0.8, table.getProbabilitiesByRowKey(key8), 0.0);
     }
+
+    @Test
+    public void getNonExistentNodeColumn() {
+        Node node1 = new Node("A");
+        Factor table = node1.getTable();
+        assertNull(table.getColumnByNode(new Node("B")));
+    }
 }

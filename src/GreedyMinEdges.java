@@ -3,7 +3,6 @@ import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.InducedGraph;
 import bayesiannetwork.Node;
 
-// TODO unit tests
 public class GreedyMinEdges extends OrderAlgo {
 
     @Override

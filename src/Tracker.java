@@ -7,7 +7,7 @@ public class Tracker {
     private long startTime;
     private int maxFactorSize = 0;
     private long startMemoryUsage;
-    private long memoryUsage = 0;
+    private long memoryUsage = 0;  // in MB
 
     /**
      * First method to call during tracking.
