@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InducedGraph</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">bayesiannetwork</a>
+</div>
+
+<h1>Coverage Summary for Class: InducedGraph (bayesiannetwork)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InducedGraph</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.1%
+  </span>
+  <span class="absValue">
+    (34/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package bayesiannetwork;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">4</i>&nbsp;import java.util.Comparator;
+<i class="no-highlight">5</i>&nbsp;import java.util.HashMap;
+<i class="no-highlight">6</i>&nbsp;import java.util.List;
+<i class="no-highlight">7</i>&nbsp;import java.util.Map;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;public class InducedGraph {
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;    private final Map&lt;Node,List&lt;Node&gt;&gt; graph;
+<i class="no-highlight">12</i>&nbsp;
+<b class="fc"><i class="no-highlight">13</i>&nbsp;    public InducedGraph(List&lt;Node&gt; nodes) {</b>
+<b class="fc"><i class="no-highlight">14</i>&nbsp;        this.graph = new HashMap&lt;&gt;();</b>
+<i class="no-highlight">15</i>&nbsp;
+<b class="fc"><i class="no-highlight">16</i>&nbsp;        for (Node node : nodes) {</b>
+<i class="no-highlight">17</i>&nbsp;            // edges between parents
+<b class="fc"><i class="no-highlight">18</i>&nbsp;            for (Node parentNode : node.getParents()) {</b>
+<b class="fc"><i class="no-highlight">19</i>&nbsp;                for (Node otherParentNode : node.getParents()) {</b>
+<b class="fc"><i class="no-highlight">20</i>&nbsp;                    if (!parentNode.equals(otherParentNode)) {</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;                        createEdge(parentNode, otherParentNode);</b>
+<i class="no-highlight">22</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">23</i>&nbsp;                }</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;            }</b>
+<i class="no-highlight">25</i>&nbsp;            // edges between node and children
+<b class="fc"><i class="no-highlight">26</i>&nbsp;            for (Node childNode : node.getChildren()) {</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;                createEdge(node, childNode);</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        }</b>
+<i class="no-highlight">30</i>&nbsp;    }
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;    public Map&lt;Node, List&lt;Node&gt;&gt; getGraph() {
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        return graph;</b>
+<i class="no-highlight">34</i>&nbsp;    }
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    public List&lt;Node&gt; getNodes() {
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        return new ArrayList&lt;&gt;(graph.keySet());</b>
+<i class="no-highlight">38</i>&nbsp;    }
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    public void createEdge(Node node1, Node node2) {
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        addNodeToOtherNode(node1, node2);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        addNodeToOtherNode(node2, node1);</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * Add node2 to list of nodes of node1
+<i class="no-highlight">47</i>&nbsp;     * */
+<i class="no-highlight">48</i>&nbsp;    private void addNodeToOtherNode(Node node1, Node node2) {
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        if (graph.containsKey(node1)) {</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;            if (!graph.get(node1).contains(node2)) {</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;                graph.get(node1).add(node2);</b>
+<i class="no-highlight">52</i>&nbsp;            }
+<i class="no-highlight">53</i>&nbsp;        }
+<i class="no-highlight">54</i>&nbsp;        else {
+<b class="fc"><i class="no-highlight">55</i>&nbsp;            List&lt;Node&gt; nodes = new java.util.ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;            nodes.add(node2);</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;            graph.put(node1, nodes);</b>
+<i class="no-highlight">58</i>&nbsp;        }
+<i class="no-highlight">59</i>&nbsp;    }
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;    @Override
+<i class="no-highlight">62</i>&nbsp;    public String toString() {
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;        // sort alphabetically
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        List&lt;Node&gt; nodes = new ArrayList&lt;&gt;(graph.keySet());</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        nodes.sort(Comparator.comparing(Node::getLabel));</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        for (Node node : nodes) {</b>
+<b class="fc"><i class="no-highlight">69</i>&nbsp;            sb.append(node.getLabel()).append(&quot; -&gt; &quot;);</b>
+<b class="fc"><i class="no-highlight">70</i>&nbsp;            for (int i = 0; i &lt; graph.get(node).size(); i++) {</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;                sb.append(graph.get(node).get(i).getLabel());</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;                if (i &lt; graph.get(node).size() - 1) {</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;                    sb.append(&quot;, &quot;);</b>
+<i class="no-highlight">74</i>&nbsp;                }
+<i class="no-highlight">75</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">76</i>&nbsp;            sb.append(&quot;\n&quot;);</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        }</b>
+<i class="no-highlight">78</i>&nbsp;
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        return sb.toString();</b>
+<i class="no-highlight">80</i>&nbsp;    }
+<i class="no-highlight">81</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-03-24 08:45</div>
+</div>
+</body>
+</html>

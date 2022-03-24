@@ -1,0 +1,274 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BayesianNetworkFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">bayesiannetwork</a>
+</div>
+
+<h1>Coverage Summary for Class: BayesianNetworkFactory (bayesiannetwork)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BayesianNetworkFactory</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.6%
+  </span>
+  <span class="absValue">
+    (87/94)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package bayesiannetwork;
+<i class="no-highlight">2</i>&nbsp;
+<b class="nc"><i class="no-highlight">3</i>&nbsp;public abstract class BayesianNetworkFactory {</b>
+<i class="no-highlight">4</i>&nbsp;
+<i class="no-highlight">5</i>&nbsp;    public static BayesianNetwork create(String name) {
+<b class="nc"><i class="no-highlight">6</i>&nbsp;        switch (name) {</b>
+<i class="no-highlight">7</i>&nbsp;            case &quot;BNA&quot;:
+<b class="nc"><i class="no-highlight">8</i>&nbsp;                return BayesianNetworkFactory.createBNA();</b>
+<i class="no-highlight">9</i>&nbsp;            case &quot;BNB&quot;:
+<b class="nc"><i class="no-highlight">10</i>&nbsp;                return BayesianNetworkFactory.createBNB();</b>
+<i class="no-highlight">11</i>&nbsp;            case &quot;BNC&quot;:
+<b class="nc"><i class="no-highlight">12</i>&nbsp;                return BayesianNetworkFactory.createBNC();</b>
+<i class="no-highlight">13</i>&nbsp;            case &quot;CNX&quot;:
+<b class="nc"><i class="no-highlight">14</i>&nbsp;                return BayesianNetworkFactory.createCNX();</b>
+<i class="no-highlight">15</i>&nbsp;            default:
+<b class="nc"><i class="no-highlight">16</i>&nbsp;                throw new IllegalArgumentException(&quot;Invalid network name&quot;);</b>
+<i class="no-highlight">17</i>&nbsp;        }
+<i class="no-highlight">18</i>&nbsp;    }
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    /**
+<i class="no-highlight">21</i>&nbsp;     * Create the BNA Bayesian Network.
+<i class="no-highlight">22</i>&nbsp;     * */
+<i class="no-highlight">23</i>&nbsp;    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+<i class="no-highlight">24</i>&nbsp;    public static BayesianNetwork createBNA() {
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        BayesianNetwork bn = new BayesianNetwork();</b>
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;        // nodes
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        Node a = bn.addNode(&quot;A&quot;);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        Node b = bn.addNode(&quot;B&quot;);</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        Node c = bn.addNode(&quot;C&quot;);</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        Node d = bn.addNode(&quot;D&quot;);</b>
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;        // edges
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        bn.addEdge(a, b);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        bn.addEdge(b, c);</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        bn.addEdge(c, d);</b>
+<i class="no-highlight">37</i>&nbsp;
+<i class="no-highlight">38</i>&nbsp;        // probabilities
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        a.getTable().setProbabilities(0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        b.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        c.getTable().setProbabilities(0.1, 0.9, 0.3, 0.7);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        d.getTable().setProbabilities(0.4, 0.6, 0.6, 0.4);</b>
+<i class="no-highlight">43</i>&nbsp;
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        return bn;</b>
+<i class="no-highlight">45</i>&nbsp;    }
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    /**
+<i class="no-highlight">48</i>&nbsp;     * Create the BNB Bayesian Network.
+<i class="no-highlight">49</i>&nbsp;     * */
+<i class="no-highlight">50</i>&nbsp;    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+<i class="no-highlight">51</i>&nbsp;    public static BayesianNetwork createBNB() {
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        BayesianNetwork bn = new BayesianNetwork();</b>
+<i class="no-highlight">53</i>&nbsp;
+<i class="no-highlight">54</i>&nbsp;        // nodes
+<b class="fc"><i class="no-highlight">55</i>&nbsp;        Node j = bn.addNode(&quot;J&quot;);</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;        Node k = bn.addNode(&quot;K&quot;);</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        Node l = bn.addNode(&quot;L&quot;);</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        Node m = bn.addNode(&quot;M&quot;);</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        Node n = bn.addNode(&quot;N&quot;);</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        Node o = bn.addNode(&quot;O&quot;);</b>
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;        // edges
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        bn.addEdge(j, k);</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        bn.addEdge(k, m);</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;        bn.addEdge(l, m);</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        bn.addEdge(m, n);</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        bn.addEdge(m, o);</b>
+<i class="no-highlight">68</i>&nbsp;
+<i class="no-highlight">69</i>&nbsp;        // probabilities
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        j.getTable().setProbabilities(0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        k.getTable().setProbabilities(0.9, 0.1, 0.7, 0.3);</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;        l.getTable().setProbabilities(0.7, 0.3);</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        m.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8, 0.7, 0.3, 0.1, 0.9);</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        n.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8);</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;        o.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);</b>
+<i class="no-highlight">76</i>&nbsp;
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        return bn;</b>
+<i class="no-highlight">78</i>&nbsp;    }
+<i class="no-highlight">79</i>&nbsp;
+<i class="no-highlight">80</i>&nbsp;    /**
+<i class="no-highlight">81</i>&nbsp;     * Create the BNC Bayesian Network.
+<i class="no-highlight">82</i>&nbsp;     * */
+<i class="no-highlight">83</i>&nbsp;    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+<i class="no-highlight">84</i>&nbsp;    public static BayesianNetwork createBNC() {
+<b class="fc"><i class="no-highlight">85</i>&nbsp;        BayesianNetwork bn = new BayesianNetwork();</b>
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;        // nodes
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        Node p = bn.addNode(&quot;P&quot;);</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;        Node q = bn.addNode(&quot;Q&quot;);</b>
+<b class="fc"><i class="no-highlight">90</i>&nbsp;        Node r = bn.addNode(&quot;R&quot;);</b>
+<b class="fc"><i class="no-highlight">91</i>&nbsp;        Node s = bn.addNode(&quot;S&quot;);</b>
+<b class="fc"><i class="no-highlight">92</i>&nbsp;        Node v = bn.addNode(&quot;V&quot;);</b>
+<b class="fc"><i class="no-highlight">93</i>&nbsp;        Node u = bn.addNode(&quot;U&quot;);</b>
+<b class="fc"><i class="no-highlight">94</i>&nbsp;        Node z = bn.addNode(&quot;Z&quot;);</b>
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;        // edges
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        bn.addEdge(p, q);</b>
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        bn.addEdge(q, v);</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        bn.addEdge(q, s);</b>
+<b class="fc"><i class="no-highlight">100</i>&nbsp;        bn.addEdge(r, v);</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        bn.addEdge(r, s);</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;        bn.addEdge(v, z);</b>
+<b class="fc"><i class="no-highlight">103</i>&nbsp;        bn.addEdge(s, z);</b>
+<b class="fc"><i class="no-highlight">104</i>&nbsp;        bn.addEdge(s, u);</b>
+<i class="no-highlight">105</i>&nbsp;
+<i class="no-highlight">106</i>&nbsp;        // probabilities
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        p.getTable().setProbabilities(0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">108</i>&nbsp;        q.getTable().setProbabilities(0.9, 0.1, 0.7, 0.3);</b>
+<b class="fc"><i class="no-highlight">109</i>&nbsp;        r.getTable().setProbabilities(0.7, 0.3);</b>
+<b class="fc"><i class="no-highlight">110</i>&nbsp;        s.getTable().setProbabilities(0.6, 0.4, 0.2, 0.8, 0.7, 0.3, 0.1, 0.9);</b>
+<b class="fc"><i class="no-highlight">111</i>&nbsp;        v.getTable().setProbabilities(0.7, 0.3, 0.15, 0.85, 0.55, 0.45, 0.1, 0.9);</b>
+<b class="fc"><i class="no-highlight">112</i>&nbsp;        u.getTable().setProbabilities(0.05, 0.95, 0.8, 0.2);</b>
+<b class="fc"><i class="no-highlight">113</i>&nbsp;        z.getTable().setProbabilities(0.65, 0.35, 0.4, 0.6, 0.7, 0.3, 0.2, 0.8);</b>
+<i class="no-highlight">114</i>&nbsp;
+<b class="fc"><i class="no-highlight">115</i>&nbsp;        return bn;</b>
+<i class="no-highlight">116</i>&nbsp;    }
+<i class="no-highlight">117</i>&nbsp;
+<i class="no-highlight">118</i>&nbsp;    /**
+<i class="no-highlight">119</i>&nbsp;     * Create the CNX Bayesian Network.
+<i class="no-highlight">120</i>&nbsp;     * */
+<i class="no-highlight">121</i>&nbsp;    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+<i class="no-highlight">122</i>&nbsp;    public static BayesianNetwork createCNX() {
+<b class="fc"><i class="no-highlight">123</i>&nbsp;        BayesianNetwork bn = new BayesianNetwork();</b>
+<i class="no-highlight">124</i>&nbsp;
+<i class="no-highlight">125</i>&nbsp;        // nodes
+<b class="fc"><i class="no-highlight">126</i>&nbsp;        Node holiday = bn.addNode(&quot;Hol&quot;);</b>
+<b class="fc"><i class="no-highlight">127</i>&nbsp;        Node ddos = bn.addNode(&quot;D_R&quot;);</b>
+<b class="fc"><i class="no-highlight">128</i>&nbsp;        Node clientActivity = bn.addNode(&quot;C_A&quot;);</b>
+<b class="fc"><i class="no-highlight">129</i>&nbsp;        Node logged = bn.addNode(&quot;Log&quot;);</b>
+<b class="fc"><i class="no-highlight">130</i>&nbsp;        Node maintenance = bn.addNode(&quot;Mai&quot;);</b>
+<b class="fc"><i class="no-highlight">131</i>&nbsp;        Node maintenanceInfo = bn.addNode(&quot;M_I&quot;);</b>
+<b class="fc"><i class="no-highlight">132</i>&nbsp;        Node firewall = bn.addNode(&quot;Fir&quot;);</b>
+<b class="fc"><i class="no-highlight">133</i>&nbsp;        Node website = bn.addNode(&quot;Web&quot;);</b>
+<b class="fc"><i class="no-highlight">134</i>&nbsp;        Node blocked = bn.addNode(&quot;Blo&quot;);</b>
+<b class="fc"><i class="no-highlight">135</i>&nbsp;        Node alert = bn.addNode(&quot;Ale&quot;);</b>
+<i class="no-highlight">136</i>&nbsp;
+<i class="no-highlight">137</i>&nbsp;        // edges
+<b class="fc"><i class="no-highlight">138</i>&nbsp;        bn.addEdge(holiday, ddos);</b>
+<b class="fc"><i class="no-highlight">139</i>&nbsp;        bn.addEdge(clientActivity, logged);</b>
+<b class="fc"><i class="no-highlight">140</i>&nbsp;        bn.addEdge(maintenance, firewall);</b>
+<b class="fc"><i class="no-highlight">141</i>&nbsp;        bn.addEdge(maintenanceInfo, firewall);</b>
+<b class="fc"><i class="no-highlight">142</i>&nbsp;        bn.addEdge(website, blocked);</b>
+<b class="fc"><i class="no-highlight">143</i>&nbsp;        bn.addEdge(ddos, alert);</b>
+<b class="fc"><i class="no-highlight">144</i>&nbsp;        bn.addEdge(logged, alert);</b>
+<b class="fc"><i class="no-highlight">145</i>&nbsp;        bn.addEdge(firewall, alert);</b>
+<b class="fc"><i class="no-highlight">146</i>&nbsp;        bn.addEdge(blocked, alert);</b>
+<i class="no-highlight">147</i>&nbsp;
+<i class="no-highlight">148</i>&nbsp;        // probabilities
+<b class="fc"><i class="no-highlight">149</i>&nbsp;        holiday.getTable().setProbabilities(0.125, 0.875);</b>
+<b class="fc"><i class="no-highlight">150</i>&nbsp;        ddos.getTable().setProbabilities(0.15, 0.85, 0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">151</i>&nbsp;        clientActivity.getTable().setProbabilities(0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">152</i>&nbsp;        logged.getTable().setProbabilities(0.7, 0.3, 0.3, 0.7);</b>
+<b class="fc"><i class="no-highlight">153</i>&nbsp;        maintenance.getTable().setProbabilities(0.1, 0.9);</b>
+<b class="fc"><i class="no-highlight">154</i>&nbsp;        maintenanceInfo.getTable().setProbabilities(0.02, 0.98);</b>
+<b class="fc"><i class="no-highlight">155</i>&nbsp;        firewall.getTable().setProbabilities(0.5, 0.5, 0.5, 0.5, 0.03, 0.97, 0.99, 0.01);</b>
+<b class="fc"><i class="no-highlight">156</i>&nbsp;        website.getTable().setProbabilities(0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">157</i>&nbsp;        blocked.getTable().setProbabilities(0.85, 0.15, 0.05, 0.95);</b>
+<b class="fc"><i class="no-highlight">158</i>&nbsp;        alert.getTable().setProbabilities(</b>
+<i class="no-highlight">159</i>&nbsp;                0.95, 0.05, 0.7125, 0.2875, 0.7125, 0.2875,
+<i class="no-highlight">160</i>&nbsp;                0.475, 0.525, 0.7125, 0.2875, 0.475, 0.525,
+<i class="no-highlight">161</i>&nbsp;                0.475, 0.525, 0.2375, 0.7625, 0.7125, 0.2875,
+<i class="no-highlight">162</i>&nbsp;                0.475, 0.525, 0.475, 0.525, 0.2375, 0.7625,
+<i class="no-highlight">163</i>&nbsp;                0.475, 0.525, 0.2375, 0.7625, 0.2375, 0.7625, 0, 1
+<i class="no-highlight">164</i>&nbsp;        );
+<i class="no-highlight">165</i>&nbsp;
+<b class="fc"><i class="no-highlight">166</i>&nbsp;        return bn;</b>
+<i class="no-highlight">167</i>&nbsp;    }
+<i class="no-highlight">168</i>&nbsp;
+<i class="no-highlight">169</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-03-24 08:45</div>
+</div>
+</body>
+</html>
