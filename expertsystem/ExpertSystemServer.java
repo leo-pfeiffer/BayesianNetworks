@@ -18,7 +18,7 @@ public class ExpertSystemServer {
 
     public static void main(String[] args) throws IOException {
 
-        int port = 8080;
+        int port = 9876;
         if (args.length == 2) {
             port = Integer.parseInt(args[1]);
         }
