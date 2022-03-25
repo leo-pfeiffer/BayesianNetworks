@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,12 +25,14 @@ public class A3main {
         Scanner sc = new Scanner(System.in);
 
         switch (args[0]) {
+            // print network only
             case "P1": {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
                 System.out.println(bn);
             }
             break;
 
+            // run query (no evidence, given order)
             case "P2": {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
@@ -46,6 +49,7 @@ public class A3main {
             }
             break;
 
+            // run query (with evidence, given order)
             case "P3": {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
@@ -62,6 +66,7 @@ public class A3main {
             }
             break;
 
+            // run query (with evidence, order is determined by an ordering algorithm)
             case "P4": {
                 BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);
 
@@ -79,7 +84,18 @@ public class A3main {
                 double result = ve.getResult(variableNode, order, numericValue, evidence);
                 printResult(result);
             }
-            break;
+
+            // run the expert system server
+            case "P5": {
+                try {
+                    ExpertSystemServer.main(new String[]{});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+            default:
+                break;
         }
         sc.close();
     }
