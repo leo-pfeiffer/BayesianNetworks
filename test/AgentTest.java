@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.Factor;
 import bayesiannetwork.Node;
@@ -26,8 +27,9 @@ public class AgentTest {
         Factor result = ve.pointWiseProduct(a.getTable(), b.getTable());
 
         double[] expected = new double[]{0.08, 0.09, 0.02, 0.81};
+        List<Double> actual = result.getProbabilities();
         for (int i = 0; i < result.getProbabilities().size(); i++) {
-            assertEquals(expected[i], result.getProbabilities().get(i), 0.001);
+            assertEquals(expected[i], actual.get(i), 0.001);
         }
     }
 
