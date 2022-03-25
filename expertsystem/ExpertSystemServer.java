@@ -17,7 +17,13 @@ import com.google.gson.Gson;
 public class ExpertSystemServer {
 
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+
+        int port = 8080;
+        if (args.length == 2) {
+            port = Integer.parseInt(args[1]);
+        }
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         HttpContext context = server.createContext("/");
         context.setHandler(ExpertSystemServer::handleRequest);
         server.start();
