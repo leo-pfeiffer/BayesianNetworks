@@ -8,7 +8,7 @@ The report can be found in `doc/report.pdf`.
 
 ## Running the project
 
-Running the project (without tests etc.):
+Running the project (without extension, without tests etc.):
 ```bash
 javac *.java
 java A3Main <Pn> <NID> [<order-algo>]
