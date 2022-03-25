@@ -73,123 +73,130 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.text.DecimalFormat;
-<i class="no-highlight">2</i>&nbsp;import java.util.ArrayList;
-<i class="no-highlight">3</i>&nbsp;import java.util.Scanner;
-<i class="no-highlight">4</i>&nbsp;import bayesiannetwork.BayesianNetwork;
-<i class="no-highlight">5</i>&nbsp;import bayesiannetwork.BayesianNetworkFactory;
-<i class="no-highlight">6</i>&nbsp;import bayesiannetwork.Node;
-<i class="no-highlight">7</i>&nbsp;
-<i class="no-highlight">8</i>&nbsp;/********************Starter Code
-<i class="no-highlight">9</i>&nbsp; *
-<i class="no-highlight">10</i>&nbsp; * This class contains some examples on how to handle the required inputs and outputs 
-<i class="no-highlight">11</i>&nbsp; *
-<i class="no-highlight">12</i>&nbsp; * @author at258
-<i class="no-highlight">13</i>&nbsp; *
-<i class="no-highlight">14</i>&nbsp; * run with 
-<i class="no-highlight">15</i>&nbsp; * java A3main &lt;Pn&gt; &lt;NID&gt;
-<i class="no-highlight">16</i>&nbsp; *
-<i class="no-highlight">17</i>&nbsp; * Feel free to change and delete parts of the code as you prefer
-<i class="no-highlight">18</i>&nbsp; *
-<i class="no-highlight">19</i>&nbsp; */
-<b class="nc"><i class="no-highlight">20</i>&nbsp;public class A3main {</b>
-<i class="no-highlight">21</i>&nbsp;
-<i class="no-highlight">22</i>&nbsp;    public static void main(String[] args) {
-<i class="no-highlight">23</i>&nbsp;
-<b class="nc"><i class="no-highlight">24</i>&nbsp;        Scanner sc = new Scanner(System.in);</b>
-<i class="no-highlight">25</i>&nbsp;
-<b class="nc"><i class="no-highlight">26</i>&nbsp;        switch (args[0]) {</b>
-<i class="no-highlight">27</i>&nbsp;            case &quot;P1&quot;: {
-<b class="nc"><i class="no-highlight">28</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
-<b class="nc"><i class="no-highlight">29</i>&nbsp;                System.out.println(bn);</b>
-<i class="no-highlight">30</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">31</i>&nbsp;            break;</b>
-<i class="no-highlight">32</i>&nbsp;
-<i class="no-highlight">33</i>&nbsp;            case &quot;P2&quot;: {
-<b class="nc"><i class="no-highlight">34</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
-<i class="no-highlight">35</i>&nbsp;
-<b class="nc"><i class="no-highlight">36</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
-<b class="nc"><i class="no-highlight">37</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
-<b class="nc"><i class="no-highlight">38</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
-<b class="nc"><i class="no-highlight">39</i>&nbsp;                Order order = Parser.orderFromInput(getOrder(sc), bn);</b>
-<i class="no-highlight">40</i>&nbsp;
-<i class="no-highlight">41</i>&nbsp;                // execute query of p(variable=value) with given order of elimination
-<b class="nc"><i class="no-highlight">42</i>&nbsp;                Agent ve = new Agent(bn);</b>
-<b class="nc"><i class="no-highlight">43</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue);</b>
-<i class="no-highlight">44</i>&nbsp;
-<b class="nc"><i class="no-highlight">45</i>&nbsp;                printResult(result);</b>
-<i class="no-highlight">46</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">47</i>&nbsp;            break;</b>
-<i class="no-highlight">48</i>&nbsp;
-<i class="no-highlight">49</i>&nbsp;            case &quot;P3&quot;: {
-<b class="nc"><i class="no-highlight">50</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">2</i>&nbsp;import java.text.DecimalFormat;
+<i class="no-highlight">3</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">4</i>&nbsp;import java.util.Scanner;
+<i class="no-highlight">5</i>&nbsp;import bayesiannetwork.BayesianNetwork;
+<i class="no-highlight">6</i>&nbsp;import bayesiannetwork.BayesianNetworkFactory;
+<i class="no-highlight">7</i>&nbsp;import bayesiannetwork.Node;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/********************Starter Code
+<i class="no-highlight">10</i>&nbsp; *
+<i class="no-highlight">11</i>&nbsp; * This class contains some examples on how to handle the required inputs and outputs 
+<i class="no-highlight">12</i>&nbsp; *
+<i class="no-highlight">13</i>&nbsp; * @author at258
+<i class="no-highlight">14</i>&nbsp; *
+<i class="no-highlight">15</i>&nbsp; * run with 
+<i class="no-highlight">16</i>&nbsp; * java A3main &lt;Pn&gt; &lt;NID&gt;
+<i class="no-highlight">17</i>&nbsp; *
+<i class="no-highlight">18</i>&nbsp; * Feel free to change and delete parts of the code as you prefer
+<i class="no-highlight">19</i>&nbsp; *
+<i class="no-highlight">20</i>&nbsp; */
+<b class="nc"><i class="no-highlight">21</i>&nbsp;public class A3main {</b>
+<i class="no-highlight">22</i>&nbsp;
+<i class="no-highlight">23</i>&nbsp;    public static void main(String[] args) {
+<i class="no-highlight">24</i>&nbsp;
+<b class="nc"><i class="no-highlight">25</i>&nbsp;        Scanner sc = new Scanner(System.in);</b>
+<i class="no-highlight">26</i>&nbsp;
+<b class="nc"><i class="no-highlight">27</i>&nbsp;        switch (args[0]) {</b>
+<i class="no-highlight">28</i>&nbsp;            // print network only
+<i class="no-highlight">29</i>&nbsp;            case &quot;P1&quot;: {
+<b class="nc"><i class="no-highlight">30</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
+<b class="nc"><i class="no-highlight">31</i>&nbsp;                System.out.println(bn);</b>
+<i class="no-highlight">32</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">33</i>&nbsp;            break;</b>
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;            // run query (no evidence, given order)
+<i class="no-highlight">36</i>&nbsp;            case &quot;P2&quot;: {
+<b class="nc"><i class="no-highlight">37</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
+<i class="no-highlight">38</i>&nbsp;
+<b class="nc"><i class="no-highlight">39</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
+<b class="nc"><i class="no-highlight">42</i>&nbsp;                Order order = Parser.orderFromInput(getOrder(sc), bn);</b>
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;                // execute query of p(variable=value) with given order of elimination
+<b class="nc"><i class="no-highlight">45</i>&nbsp;                Agent ve = new Agent(bn);</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue);</b>
+<i class="no-highlight">47</i>&nbsp;
+<b class="nc"><i class="no-highlight">48</i>&nbsp;                printResult(result);</b>
+<i class="no-highlight">49</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">50</i>&nbsp;            break;</b>
 <i class="no-highlight">51</i>&nbsp;
-<b class="nc"><i class="no-highlight">52</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
-<b class="nc"><i class="no-highlight">53</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
-<b class="nc"><i class="no-highlight">54</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
-<b class="nc"><i class="no-highlight">55</i>&nbsp;                Order order = Parser.orderFromInput(getOrder(sc), bn);</b>
-<b class="nc"><i class="no-highlight">56</i>&nbsp;                ArrayList&lt;Evidence&gt; evidence = getEvidence(sc, bn);</b>
-<i class="no-highlight">57</i>&nbsp;
-<i class="no-highlight">58</i>&nbsp;                // execute query of p(variable=value|evidence) with given order of elimination
-<b class="nc"><i class="no-highlight">59</i>&nbsp;                AgentWithEvidence ve = new AgentWithEvidence(bn);</b>
-<b class="nc"><i class="no-highlight">60</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue, evidence);</b>
-<b class="nc"><i class="no-highlight">61</i>&nbsp;                printResult(result);</b>
-<i class="no-highlight">62</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">63</i>&nbsp;            break;</b>
-<i class="no-highlight">64</i>&nbsp;
-<i class="no-highlight">65</i>&nbsp;            case &quot;P4&quot;: {
-<b class="nc"><i class="no-highlight">66</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
-<i class="no-highlight">67</i>&nbsp;
-<b class="nc"><i class="no-highlight">68</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
-<b class="nc"><i class="no-highlight">69</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
-<b class="nc"><i class="no-highlight">70</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
-<b class="nc"><i class="no-highlight">71</i>&nbsp;                ArrayList&lt;Evidence&gt; evidence = getEvidence(sc, bn);</b>
+<i class="no-highlight">52</i>&nbsp;            // run query (with evidence, given order)
+<i class="no-highlight">53</i>&nbsp;            case &quot;P3&quot;: {
+<b class="nc"><i class="no-highlight">54</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
+<i class="no-highlight">55</i>&nbsp;
+<b class="nc"><i class="no-highlight">56</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
+<b class="nc"><i class="no-highlight">57</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
+<b class="nc"><i class="no-highlight">58</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
+<b class="nc"><i class="no-highlight">59</i>&nbsp;                Order order = Parser.orderFromInput(getOrder(sc), bn);</b>
+<b class="nc"><i class="no-highlight">60</i>&nbsp;                ArrayList&lt;Evidence&gt; evidence = getEvidence(sc, bn);</b>
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;                // execute query of p(variable=value|evidence) with given order of elimination
+<b class="nc"><i class="no-highlight">63</i>&nbsp;                AgentWithEvidence ve = new AgentWithEvidence(bn);</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue, evidence);</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;                printResult(result);</b>
+<i class="no-highlight">66</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">67</i>&nbsp;            break;</b>
+<i class="no-highlight">68</i>&nbsp;
+<i class="no-highlight">69</i>&nbsp;            // run query (with evidence, order is determined by an ordering algorithm)
+<i class="no-highlight">70</i>&nbsp;            case &quot;P4&quot;: {
+<b class="nc"><i class="no-highlight">71</i>&nbsp;                BayesianNetwork bn = BayesianNetworkFactory.create(args[1]);</b>
 <i class="no-highlight">72</i>&nbsp;
-<i class="no-highlight">73</i>&nbsp;                // generate elimination order: orderAlgo either MC or GME
-<b class="nc"><i class="no-highlight">74</i>&nbsp;                OrderAlgo orderAlgo = OrderAlgoFactory.create(args[2]);</b>
-<b class="nc"><i class="no-highlight">75</i>&nbsp;                Order order = orderAlgo.findOrder(bn, variableNode);</b>
-<b class="nc"><i class="no-highlight">76</i>&nbsp;                System.out.println(order);</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;                String[] query = getQueriedNode(sc);</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;                Node variableNode = Parser.getNode(query[0], bn);</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;                int numericValue = Parser.truthValueToInt(query[1]);</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;                ArrayList&lt;Evidence&gt; evidence = getEvidence(sc, bn);</b>
 <i class="no-highlight">77</i>&nbsp;
-<b class="nc"><i class="no-highlight">78</i>&nbsp;                AgentWithEvidence ve = new AgentWithEvidence(bn);</b>
-<b class="nc"><i class="no-highlight">79</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue, evidence);</b>
-<b class="nc"><i class="no-highlight">80</i>&nbsp;                printResult(result);</b>
-<i class="no-highlight">81</i>&nbsp;            }
-<i class="no-highlight">82</i>&nbsp;            break;
-<i class="no-highlight">83</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">84</i>&nbsp;        sc.close();</b>
-<i class="no-highlight">85</i>&nbsp;    }
-<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">78</i>&nbsp;                // generate elimination order: orderAlgo either MC or GME
+<b class="nc"><i class="no-highlight">79</i>&nbsp;                OrderAlgo orderAlgo = OrderAlgoFactory.create(args[2]);</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;                Order order = orderAlgo.findOrder(bn, variableNode);</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;                System.out.println(order);</b>
+<i class="no-highlight">82</i>&nbsp;
+<b class="nc"><i class="no-highlight">83</i>&nbsp;                AgentWithEvidence ve = new AgentWithEvidence(bn);</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;                double result = ve.getResult(variableNode, order, numericValue, evidence);</b>
+<b class="nc"><i class="no-highlight">85</i>&nbsp;                printResult(result);</b>
+<i class="no-highlight">86</i>&nbsp;            }
 <i class="no-highlight">87</i>&nbsp;
-<i class="no-highlight">88</i>&nbsp;    //method to obtain the evidence from the user
-<i class="no-highlight">89</i>&nbsp;    private static ArrayList&lt;Evidence&gt; getEvidence(Scanner sc, BayesianNetwork bn) {
-<i class="no-highlight">90</i>&nbsp;
-<b class="nc"><i class="no-highlight">91</i>&nbsp;        System.out.println(&quot;Evidence:&quot;);</b>
-<b class="nc"><i class="no-highlight">92</i>&nbsp;        String[] line = sc.nextLine().split(&quot; &quot;);</b>
+<i class="no-highlight">88</i>&nbsp;            default:
+<i class="no-highlight">89</i>&nbsp;                break;
+<i class="no-highlight">90</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        sc.close();</b>
+<i class="no-highlight">92</i>&nbsp;    }
 <i class="no-highlight">93</i>&nbsp;
-<b class="nc"><i class="no-highlight">94</i>&nbsp;        return Parser.parseEvidence(line, bn);</b>
-<i class="no-highlight">95</i>&nbsp;    }
-<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">94</i>&nbsp;
+<i class="no-highlight">95</i>&nbsp;    //method to obtain the evidence from the user
+<i class="no-highlight">96</i>&nbsp;    private static ArrayList&lt;Evidence&gt; getEvidence(Scanner sc, BayesianNetwork bn) {
 <i class="no-highlight">97</i>&nbsp;
-<i class="no-highlight">98</i>&nbsp;    //method to obtain the order from the user
-<i class="no-highlight">99</i>&nbsp;    private static String[] getOrder(Scanner sc) {
-<b class="nc"><i class="no-highlight">100</i>&nbsp;        System.out.println(&quot;Order:&quot;);</b>
-<b class="nc"><i class="no-highlight">101</i>&nbsp;        return sc.nextLine().split(&quot;,&quot;);</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;        System.out.println(&quot;Evidence:&quot;);</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;        String[] line = sc.nextLine().split(&quot; &quot;);</b>
+<i class="no-highlight">100</i>&nbsp;
+<b class="nc"><i class="no-highlight">101</i>&nbsp;        return Parser.parseEvidence(line, bn);</b>
 <i class="no-highlight">102</i>&nbsp;    }
 <i class="no-highlight">103</i>&nbsp;
 <i class="no-highlight">104</i>&nbsp;
-<i class="no-highlight">105</i>&nbsp;    //method to obtain the queried node from the user
-<i class="no-highlight">106</i>&nbsp;    private static String[] getQueriedNode(Scanner sc) {
-<b class="nc"><i class="no-highlight">107</i>&nbsp;        System.out.println(&quot;Query:&quot;);</b>
-<b class="nc"><i class="no-highlight">108</i>&nbsp;        return sc.nextLine().split(&quot;:&quot;);</b>
+<i class="no-highlight">105</i>&nbsp;    //method to obtain the order from the user
+<i class="no-highlight">106</i>&nbsp;    private static String[] getOrder(Scanner sc) {
+<b class="nc"><i class="no-highlight">107</i>&nbsp;        System.out.println(&quot;Order:&quot;);</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;        return sc.nextLine().split(&quot;,&quot;);</b>
 <i class="no-highlight">109</i>&nbsp;    }
 <i class="no-highlight">110</i>&nbsp;
-<i class="no-highlight">111</i>&nbsp;    //method to format and print the result
-<i class="no-highlight">112</i>&nbsp;    private static void printResult(double result) {
-<b class="nc"><i class="no-highlight">113</i>&nbsp;        DecimalFormat dd = new DecimalFormat(&quot;#0.00000&quot;);</b>
-<b class="nc"><i class="no-highlight">114</i>&nbsp;        System.out.println(dd.format(result));</b>
-<i class="no-highlight">115</i>&nbsp;    }
-<i class="no-highlight">116</i>&nbsp;
-<i class="no-highlight">117</i>&nbsp;}
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;    //method to obtain the queried node from the user
+<i class="no-highlight">113</i>&nbsp;    private static String[] getQueriedNode(Scanner sc) {
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        System.out.println(&quot;Query:&quot;);</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        return sc.nextLine().split(&quot;:&quot;);</b>
+<i class="no-highlight">116</i>&nbsp;    }
+<i class="no-highlight">117</i>&nbsp;
+<i class="no-highlight">118</i>&nbsp;    //method to format and print the result
+<i class="no-highlight">119</i>&nbsp;    private static void printResult(double result) {
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        DecimalFormat dd = new DecimalFormat(&quot;#0.00000&quot;);</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        System.out.println(dd.format(result));</b>
+<i class="no-highlight">122</i>&nbsp;    }
+<i class="no-highlight">123</i>&nbsp;
+<i class="no-highlight">124</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -216,7 +223,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-03-24 08:45</div>
+    <div style="float:right;">generated on 2022-03-25 06:41</div>
 </div>
 </body>
 </html>

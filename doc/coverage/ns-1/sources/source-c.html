@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > Parser</title>
+  <title>Coverage Report > OrderAlgo</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">&lt;empty package name&gt;</a>
 </div>
 
-<h1>Coverage Summary for Class: Parser (&lt;empty package name&gt;)</h1>
+<h1>Coverage Summary for Class: OrderAlgo (&lt;empty package name&gt;)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,29 +39,29 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Parser</td>
+  <td class="name">OrderAlgo</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/5)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/23)
+    (1/1)
   </span>
 </td>
 </tr>
@@ -73,55 +73,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.util.ArrayList;
-<i class="no-highlight">2</i>&nbsp;import bayesiannetwork.BayesianNetwork;
-<i class="no-highlight">3</i>&nbsp;import bayesiannetwork.Node;
-<i class="no-highlight">4</i>&nbsp;
-<b class="nc"><i class="no-highlight">5</i>&nbsp;public class Parser {</b>
-<i class="no-highlight">6</i>&nbsp;
-<i class="no-highlight">7</i>&nbsp;    public static int truthValueToInt(String value) {
-<b class="nc"><i class="no-highlight">8</i>&nbsp;        switch (value) {</b>
-<i class="no-highlight">9</i>&nbsp;            case &quot;T&quot;:
-<b class="nc"><i class="no-highlight">10</i>&nbsp;                return 1;</b>
-<i class="no-highlight">11</i>&nbsp;            case &quot;F&quot;:
-<b class="nc"><i class="no-highlight">12</i>&nbsp;                return 0;</b>
-<i class="no-highlight">13</i>&nbsp;            default:
-<b class="nc"><i class="no-highlight">14</i>&nbsp;                throw new IllegalArgumentException(&quot;Invalid value: &quot; + value);</b>
-<i class="no-highlight">15</i>&nbsp;        }
-<i class="no-highlight">16</i>&nbsp;    }
-<i class="no-highlight">17</i>&nbsp;
-<i class="no-highlight">18</i>&nbsp;    public static Order orderFromInput(String[] orderRaw, BayesianNetwork bn) {
-<b class="nc"><i class="no-highlight">19</i>&nbsp;        Order order = new Order();</b>
-<b class="nc"><i class="no-highlight">20</i>&nbsp;        for (String n : orderRaw) {</b>
-<b class="nc"><i class="no-highlight">21</i>&nbsp;            Node node = bn.getNode(n);</b>
-<b class="nc"><i class="no-highlight">22</i>&nbsp;            if (node == null) {</b>
-<b class="nc"><i class="no-highlight">23</i>&nbsp;                throw new IllegalArgumentException(&quot;Invalid node: &quot; + n);</b>
-<i class="no-highlight">24</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">25</i>&nbsp;            order.add(node);</b>
-<i class="no-highlight">26</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">27</i>&nbsp;        return order;</b>
-<i class="no-highlight">28</i>&nbsp;    }
-<i class="no-highlight">29</i>&nbsp;
-<i class="no-highlight">30</i>&nbsp;    public static Node getNode(String variable, BayesianNetwork bn) {
-<b class="nc"><i class="no-highlight">31</i>&nbsp;        Node variableNode = bn.getNode(variable);</b>
-<b class="nc"><i class="no-highlight">32</i>&nbsp;        if (variableNode == null) {</b>
-<b class="nc"><i class="no-highlight">33</i>&nbsp;            throw new IllegalArgumentException(&quot;Invalid node: &quot; + variable);</b>
-<i class="no-highlight">34</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">35</i>&nbsp;        return variableNode;</b>
-<i class="no-highlight">36</i>&nbsp;    }
-<i class="no-highlight">37</i>&nbsp;
-<i class="no-highlight">38</i>&nbsp;    public static ArrayList&lt;Evidence&gt; parseEvidence(String[] evidenceRaw, BayesianNetwork bn) {
-<b class="nc"><i class="no-highlight">39</i>&nbsp;        ArrayList&lt;Evidence&gt; evidence = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i class="no-highlight">40</i>&nbsp;        for (String st : evidenceRaw) {</b>
-<b class="nc"><i class="no-highlight">41</i>&nbsp;            String[] ev = st.split(&quot;:&quot;);</b>
-<b class="nc"><i class="no-highlight">42</i>&nbsp;            int truthValue = Parser.truthValueToInt(ev[1]);</b>
-<b class="nc"><i class="no-highlight">43</i>&nbsp;            Node node = Parser.getNode(ev[0], bn);</b>
-<b class="nc"><i class="no-highlight">44</i>&nbsp;            evidence.add(new Evidence(node, truthValue));</b>
-<i class="no-highlight">45</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">46</i>&nbsp;        return evidence;</b>
-<i class="no-highlight">47</i>&nbsp;    }
-<i class="no-highlight">48</i>&nbsp;
-<i class="no-highlight">49</i>&nbsp;}
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import bayesiannetwork.BayesianNetwork;
+<i class="no-highlight">2</i>&nbsp;import bayesiannetwork.Node;
+<i class="no-highlight">3</i>&nbsp;
+<b class="fc"><i class="no-highlight">4</i>&nbsp;public abstract class OrderAlgo {</b>
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;    abstract Order findOrder(BayesianNetwork bn, Node queryNode);
+<i class="no-highlight">7</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -148,7 +106,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-03-24 08:45</div>
+    <div style="float:right;">generated on 2022-03-25 06:41</div>
 </div>
 </body>
 </html>

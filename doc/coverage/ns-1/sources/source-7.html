@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > JsonConf</title>
+  <title>Coverage Report > ExpertSystemServer</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">&lt;empty package name&gt;</a>
 </div>
 
-<h1>Coverage Summary for Class: JsonConf (&lt;empty package name&gt;)</h1>
+<h1>Coverage Summary for Class: ExpertSystemServer (&lt;empty package name&gt;)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,7 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">JsonConf</td>
+  <td class="name">ExpertSystemServer</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -61,7 +61,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/11)
+    (0/60)
   </span>
 </td>
 </tr>
@@ -73,50 +73,121 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.io.Serializable;
-<i class="no-highlight">2</i>&nbsp;import java.util.ArrayList;
-<i class="no-highlight">3</i>&nbsp;
-<i class="no-highlight">4</i>&nbsp;public class JsonConf implements Serializable {
-<i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;    private final String queryNode;
-<i class="no-highlight">7</i>&nbsp;    private final String queryValue;
-<i class="no-highlight">8</i>&nbsp;    private final String evidence;
-<i class="no-highlight">9</i>&nbsp;    private final String order;
-<i class="no-highlight">10</i>&nbsp;    private final String[] providedOrder;
-<i class="no-highlight">11</i>&nbsp;
-<i class="no-highlight">12</i>&nbsp;    public JsonConf(
-<i class="no-highlight">13</i>&nbsp;            String queryNode,
-<i class="no-highlight">14</i>&nbsp;            String queryValue,
-<i class="no-highlight">15</i>&nbsp;            String evidence,
-<i class="no-highlight">16</i>&nbsp;            String order,
-<b class="nc"><i class="no-highlight">17</i>&nbsp;            String[] providedOrder) {</b>
-<b class="nc"><i class="no-highlight">18</i>&nbsp;        this.queryNode = queryNode;</b>
-<b class="nc"><i class="no-highlight">19</i>&nbsp;        this.queryValue = queryValue;</b>
-<b class="nc"><i class="no-highlight">20</i>&nbsp;        this.evidence = evidence;</b>
-<b class="nc"><i class="no-highlight">21</i>&nbsp;        this.order = order;</b>
-<b class="nc"><i class="no-highlight">22</i>&nbsp;        this.providedOrder = providedOrder;</b>
-<i class="no-highlight">23</i>&nbsp;    }
-<i class="no-highlight">24</i>&nbsp;
-<i class="no-highlight">25</i>&nbsp;    public String getQueryNode() {
-<b class="nc"><i class="no-highlight">26</i>&nbsp;        return queryNode;</b>
-<i class="no-highlight">27</i>&nbsp;    }
-<i class="no-highlight">28</i>&nbsp;
-<i class="no-highlight">29</i>&nbsp;    public String getQueryValue() {
-<b class="nc"><i class="no-highlight">30</i>&nbsp;        return queryValue;</b>
-<i class="no-highlight">31</i>&nbsp;    }
-<i class="no-highlight">32</i>&nbsp;
-<i class="no-highlight">33</i>&nbsp;    public String getEvidence() {
-<b class="nc"><i class="no-highlight">34</i>&nbsp;        return evidence;</b>
-<i class="no-highlight">35</i>&nbsp;    }
-<i class="no-highlight">36</i>&nbsp;
-<i class="no-highlight">37</i>&nbsp;    public String getOrder() {
-<b class="nc"><i class="no-highlight">38</i>&nbsp;        return order;</b>
-<i class="no-highlight">39</i>&nbsp;    }
-<i class="no-highlight">40</i>&nbsp;
-<i class="no-highlight">41</i>&nbsp;    public String[] getProvidedOrder() {
-<b class="nc"><i class="no-highlight">42</i>&nbsp;        return providedOrder;</b>
-<i class="no-highlight">43</i>&nbsp;    }
-<i class="no-highlight">44</i>&nbsp;}
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.io.BufferedReader;
+<i class="no-highlight">2</i>&nbsp;import java.io.File;
+<i class="no-highlight">3</i>&nbsp;import java.io.IOException;
+<i class="no-highlight">4</i>&nbsp;import java.io.InputStreamReader;
+<i class="no-highlight">5</i>&nbsp;import java.io.OutputStream;
+<i class="no-highlight">6</i>&nbsp;import java.lang.reflect.Type;
+<i class="no-highlight">7</i>&nbsp;import java.net.InetSocketAddress;
+<i class="no-highlight">8</i>&nbsp;import java.nio.file.Files;
+<i class="no-highlight">9</i>&nbsp;import java.text.DecimalFormat;
+<i class="no-highlight">10</i>&nbsp;import bayesiannetwork.BayesianNetworkFactory;
+<i class="no-highlight">11</i>&nbsp;import com.sun.net.httpserver.Headers;
+<i class="no-highlight">12</i>&nbsp;import com.sun.net.httpserver.HttpContext;
+<i class="no-highlight">13</i>&nbsp;import com.sun.net.httpserver.HttpExchange;
+<i class="no-highlight">14</i>&nbsp;import com.sun.net.httpserver.HttpServer;
+<i class="no-highlight">15</i>&nbsp;import com.google.gson.Gson;
+<i class="no-highlight">16</i>&nbsp;
+<b class="nc"><i class="no-highlight">17</i>&nbsp;public class ExpertSystemServer {</b>
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;    public static void main(String[] args) throws IOException {
+<i class="no-highlight">20</i>&nbsp;
+<b class="nc"><i class="no-highlight">21</i>&nbsp;        int port = 9876;</b>
+<b class="nc"><i class="no-highlight">22</i>&nbsp;        if (args.length == 2) {</b>
+<b class="nc"><i class="no-highlight">23</i>&nbsp;            port = Integer.parseInt(args[1]);</b>
+<i class="no-highlight">24</i>&nbsp;        }
+<i class="no-highlight">25</i>&nbsp;
+<b class="nc"><i class="no-highlight">26</i>&nbsp;        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);</b>
+<b class="nc"><i class="no-highlight">27</i>&nbsp;        HttpContext context = server.createContext(&quot;/&quot;);</b>
+<b class="nc"><i class="no-highlight">28</i>&nbsp;        context.setHandler(ExpertSystemServer::handleRequest);</b>
+<b class="nc"><i class="no-highlight">29</i>&nbsp;        server.start();</b>
+<b class="nc"><i class="no-highlight">30</i>&nbsp;        System.out.println(&quot;Listening on port &quot; + port + &quot;...&quot;);</b>
+<b class="nc"><i class="no-highlight">31</i>&nbsp;        System.out.println(&quot;Go to http://localhost:&quot; + port + &quot;/ in your browser.&quot;);</b>
+<i class="no-highlight">32</i>&nbsp;    }
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;    private static void handleRequest(HttpExchange exchange) throws IOException {
+<b class="nc"><i class="no-highlight">35</i>&nbsp;        if (&quot;GET&quot;.equals(exchange.getRequestMethod())) {</b>
+<b class="nc"><i class="no-highlight">36</i>&nbsp;            handleGetRequest(exchange);</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;        } else if (&quot;POST&quot;.equals(exchange.getRequestMethod())) {</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;            handlePostRequest(exchange);</b>
+<i class="no-highlight">39</i>&nbsp;        }
+<i class="no-highlight">40</i>&nbsp;    }
+<i class="no-highlight">41</i>&nbsp;
+<i class="no-highlight">42</i>&nbsp;    private static void handleGetRequest(HttpExchange exchange) throws IOException {
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        File path = new File(&quot;www/index.html&quot;);</b>
+<i class="no-highlight">44</i>&nbsp;
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        Headers h = exchange.getResponseHeaders();</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        h.add(&quot;Content-Type&quot;, &quot;text/html&quot;);</b>
+<i class="no-highlight">47</i>&nbsp;
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        OutputStream out = exchange.getResponseBody();</b>
+<i class="no-highlight">49</i>&nbsp;
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        if (path.exists()) {</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;            exchange.sendResponseHeaders(200, path.length());</b>
+<b class="nc"><i class="no-highlight">52</i>&nbsp;            out.write(Files.readAllBytes(path.toPath()));</b>
+<i class="no-highlight">53</i>&nbsp;        } else {
+<b class="nc"><i class="no-highlight">54</i>&nbsp;            System.err.println(&quot;File not found: &quot; + path.getAbsolutePath());</b>
+<b class="nc"><i class="no-highlight">55</i>&nbsp;            exchange.sendResponseHeaders(404, 0);</b>
+<b class="nc"><i class="no-highlight">56</i>&nbsp;            out.write(&quot;404 File not found.&quot;.getBytes());</b>
+<i class="no-highlight">57</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        out.close();</b>
+<i class="no-highlight">59</i>&nbsp;    }
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;    private static void handlePostRequest(HttpExchange exchange) throws IOException {
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;        JsonConf conf;
+<b class="nc"><i class="no-highlight">64</i>&nbsp;        try (BufferedReader br = new BufferedReader(new InputStreamReader(exchange.getRequestBody()))) {</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;            StringBuilder sb = new StringBuilder();</b>
+<i class="no-highlight">66</i>&nbsp;            String line;
+<b class="nc"><i class="no-highlight">67</i>&nbsp;            while((line = br.readLine()) != null) {</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;                sb.append(line);</b>
+<i class="no-highlight">69</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">70</i>&nbsp;            br.close();</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            String confString = sb.toString();</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;            System.out.println(&quot;Received: &quot; + confString);</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;            conf = readJSON(confString);</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            assert conf != null;</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;            OutputStream out = exchange.getResponseBody();</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;            String response = &quot;Error: &quot; + e.getMessage();</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;            exchange.sendResponseHeaders(200, response.length());</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;            out.write(response.getBytes());</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;            out.close();</b>
+<i class="no-highlight">82</i>&nbsp;            return;
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        }</b>
+<i class="no-highlight">84</i>&nbsp;
+<b class="nc"><i class="no-highlight">85</i>&nbsp;        Agent agent = JsonConf.runConfiguration(conf, BayesianNetworkFactory.createCNX());</b>
+<b class="nc"><i class="no-highlight">86</i>&nbsp;        double result = agent.result;</b>
+<b class="nc"><i class="no-highlight">87</i>&nbsp;        long runtime = agent.tracker.getRunTime();</b>
+<i class="no-highlight">88</i>&nbsp;
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        DecimalFormat dd = new DecimalFormat(&quot;#0.00000&quot;);</b>
+<i class="no-highlight">90</i>&nbsp;
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        String response = &quot;{&quot; +</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;                    &quot;\&quot;result\&quot;: &quot; + dd.format(result) + &quot;,&quot; +</b>
+<b class="nc"><i class="no-highlight">93</i>&nbsp;                    &quot;\&quot;runtime\&quot;: &quot; + dd.format(runtime) +</b>
+<i class="no-highlight">94</i>&nbsp;                &quot;}&quot;;
+<i class="no-highlight">95</i>&nbsp;
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        System.out.println(&quot;Result: &quot; + dd.format(result));</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        System.out.println(&quot;Runtime: &quot; + dd.format(runtime) + &quot;\n&quot;);</b>
+<i class="no-highlight">98</i>&nbsp;
+<b class="nc"><i class="no-highlight">99</i>&nbsp;        OutputStream out = exchange.getResponseBody();</b>
+<b class="nc"><i class="no-highlight">100</i>&nbsp;        exchange.sendResponseHeaders(200, response.length());</b>
+<b class="nc"><i class="no-highlight">101</i>&nbsp;        out.write(response.getBytes());</b>
+<b class="nc"><i class="no-highlight">102</i>&nbsp;        out.close();</b>
+<i class="no-highlight">103</i>&nbsp;    }
+<i class="no-highlight">104</i>&nbsp;
+<i class="no-highlight">105</i>&nbsp;    private static JsonConf readJSON(String json) {
+<i class="no-highlight">106</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">107</i>&nbsp;            Gson gson = new Gson();</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;            return gson.fromJson(json, (Type) JsonConf.class);</b>
+<i class="no-highlight">109</i>&nbsp;
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        } catch (Exception ex) {</b>
+<b class="nc"><i class="no-highlight">111</i>&nbsp;            ex.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">112</i>&nbsp;            return null;</b>
+<i class="no-highlight">113</i>&nbsp;        }
+<i class="no-highlight">114</i>&nbsp;    }
+<i class="no-highlight">115</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -143,7 +214,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-03-24 08:45</div>
+    <div style="float:right;">generated on 2022-03-25 06:41</div>
 </div>
 </body>
 </html>

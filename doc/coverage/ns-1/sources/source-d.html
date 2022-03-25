@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > Tracker</title>
+  <title>Coverage Report > OrderAlgoFactory</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">&lt;empty package name&gt;</a>
 </div>
 
-<h1>Coverage Summary for Class: Tracker (&lt;empty package name&gt;)</h1>
+<h1>Coverage Summary for Class: OrderAlgoFactory (&lt;empty package name&gt;)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,7 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Tracker</td>
+  <td class="name">OrderAlgoFactory</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -50,18 +50,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    62.5%
+    50%
   </span>
   <span class="absValue">
-    (5/8)
+    (1/2)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    84.2%
+    80%
   </span>
   <span class="absValue">
-    (16/19)
+    (4/5)
   </span>
 </td>
 </tr>
@@ -73,65 +73,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.util.Collection;
-<i class="no-highlight">2</i>&nbsp;import bayesiannetwork.Factor;
-<i class="no-highlight">3</i>&nbsp;
-<b class="fc"><i class="no-highlight">4</i>&nbsp;public class Tracker {</b>
-<i class="no-highlight">5</i>&nbsp;    // run time
-<b class="fc"><i class="no-highlight">6</i>&nbsp;    private long runTime = 0;</b>
-<i class="no-highlight">7</i>&nbsp;    private long startTime;
-<b class="fc"><i class="no-highlight">8</i>&nbsp;    private int maxFactorSize = 0;</b>
-<i class="no-highlight">9</i>&nbsp;    private long startMemoryUsage;
-<b class="fc"><i class="no-highlight">10</i>&nbsp;    private long memoryUsage = 0;  // in MB</b>
-<i class="no-highlight">11</i>&nbsp;
-<i class="no-highlight">12</i>&nbsp;    /**
-<i class="no-highlight">13</i>&nbsp;     * First method to call during tracking.
-<i class="no-highlight">14</i>&nbsp;     * */
-<i class="no-highlight">15</i>&nbsp;    public void startTracker() {
-<b class="fc"><i class="no-highlight">16</i>&nbsp;        this.startTime = System.currentTimeMillis();</b>
-<b class="fc"><i class="no-highlight">17</i>&nbsp;        this.startMemoryUsage = getCurrentMemoryUsage();</b>
-<i class="no-highlight">18</i>&nbsp;    }
-<i class="no-highlight">19</i>&nbsp;
-<i class="no-highlight">20</i>&nbsp;    /**
-<i class="no-highlight">21</i>&nbsp;     * Last method to call during tracking.
-<i class="no-highlight">22</i>&nbsp;     * */
-<i class="no-highlight">23</i>&nbsp;    public void stopTracker() {
-<b class="fc"><i class="no-highlight">24</i>&nbsp;        this.runTime = System.currentTimeMillis() - this.startTime;</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;        this.memoryUsage = getCurrentMemoryUsage() - this.startMemoryUsage;</b>
-<i class="no-highlight">26</i>&nbsp;    }
-<i class="no-highlight">27</i>&nbsp;
-<i class="no-highlight">28</i>&nbsp;    public long getRunTime() {
-<b class="nc"><i class="no-highlight">29</i>&nbsp;        return this.runTime;</b>
-<i class="no-highlight">30</i>&nbsp;    }
-<i class="no-highlight">31</i>&nbsp;
-<i class="no-highlight">32</i>&nbsp;    public long getMemoryUsage() {
-<b class="nc"><i class="no-highlight">33</i>&nbsp;        return this.memoryUsage;</b>
-<i class="no-highlight">34</i>&nbsp;    }
-<i class="no-highlight">35</i>&nbsp;
-<i class="no-highlight">36</i>&nbsp;    public int getMaxFactorSize() {
-<b class="nc"><i class="no-highlight">37</i>&nbsp;        return maxFactorSize;</b>
-<i class="no-highlight">38</i>&nbsp;    }
-<i class="no-highlight">39</i>&nbsp;
-<i class="no-highlight">40</i>&nbsp;    public void trackMaxFactorSize(Collection&lt;Factor&gt; factors) {
-<b class="fc"><i class="no-highlight">41</i>&nbsp;        for (Factor factor : factors) {</b>
-<b class="fc"><i class="no-highlight">42</i>&nbsp;            int size = factor.getNumRows() * factor.getColumns().size();</b>
-<b class="fc"><i class="no-highlight">43</i>&nbsp;            if (size &gt; maxFactorSize) {</b>
-<b class="fc"><i class="no-highlight">44</i>&nbsp;                maxFactorSize = size;</b>
-<i class="no-highlight">45</i>&nbsp;            }
-<b class="fc"><i class="no-highlight">46</i>&nbsp;        }</b>
-<i class="no-highlight">47</i>&nbsp;    }
-<i class="no-highlight">48</i>&nbsp;
-<i class="no-highlight">49</i>&nbsp;    /**
-<i class="no-highlight">50</i>&nbsp;     * Get the current memory usage.
-<i class="no-highlight">51</i>&nbsp;     * This is a rough estimate of the current memory usage since the garbage collector isn&#39;t necessarily
-<i class="no-highlight">52</i>&nbsp;     * called immediately after the method returns.
-<i class="no-highlight">53</i>&nbsp;     * */
-<i class="no-highlight">54</i>&nbsp;    private long getCurrentMemoryUsage() {
-<b class="fc"><i class="no-highlight">55</i>&nbsp;        long TO_MB = 1024 * 1024;</b>
-<b class="fc"><i class="no-highlight">56</i>&nbsp;        System.gc();</b>
-<b class="fc"><i class="no-highlight">57</i>&nbsp;        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / TO_MB;</b>
-<i class="no-highlight">58</i>&nbsp;    }
-<i class="no-highlight">59</i>&nbsp;}
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;/**
+<i class="no-highlight">2</i>&nbsp; * Instantiate the correct order algorithm.
+<i class="no-highlight">3</i>&nbsp; * */
+<b class="nc"><i class="no-highlight">4</i>&nbsp;public abstract class OrderAlgoFactory {</b>
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;    public static OrderAlgo create(String algo) {
+<b class="fc"><i class="no-highlight">7</i>&nbsp;        switch (algo) {</b>
+<i class="no-highlight">8</i>&nbsp;            case &quot;MC&quot;:
+<b class="fc"><i class="no-highlight">9</i>&nbsp;                return new MaxCardinality();</b>
+<i class="no-highlight">10</i>&nbsp;            case &quot;GME&quot;:
+<b class="fc"><i class="no-highlight">11</i>&nbsp;                return new GreedyMinEdges();</b>
+<i class="no-highlight">12</i>&nbsp;            default:
+<b class="fc"><i class="no-highlight">13</i>&nbsp;                throw new IllegalArgumentException(&quot;Invalid algorithm: &quot; + algo);</b>
+<i class="no-highlight">14</i>&nbsp;        }
+<i class="no-highlight">15</i>&nbsp;    }
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -158,7 +116,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-03-24 08:45</div>
+    <div style="float:right;">generated on 2022-03-25 06:41</div>
 </div>
 </body>
 </html>

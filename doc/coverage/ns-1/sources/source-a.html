@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > OrderAlgo</title>
+  <title>Coverage Report > MaxCardinality</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">&lt;empty package name&gt;</a>
 </div>
 
-<h1>Coverage Summary for Class: OrderAlgo (&lt;empty package name&gt;)</h1>
+<h1>Coverage Summary for Class: MaxCardinality (&lt;empty package name&gt;)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,7 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">OrderAlgo</td>
+  <td class="name">MaxCardinality</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -53,7 +53,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (3/3)
   </span>
 </td>
 <td class="coverageStat">
@@ -61,7 +61,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (31/31)
   </span>
 </td>
 </tr>
@@ -73,13 +73,64 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import bayesiannetwork.BayesianNetwork;
-<i class="no-highlight">2</i>&nbsp;import bayesiannetwork.Node;
-<i class="no-highlight">3</i>&nbsp;
-<b class="fc"><i class="no-highlight">4</i>&nbsp;public abstract class OrderAlgo {</b>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">2</i>&nbsp;import bayesiannetwork.BayesianNetwork;
+<i class="no-highlight">3</i>&nbsp;import bayesiannetwork.InducedGraph;
+<i class="no-highlight">4</i>&nbsp;import bayesiannetwork.Node;
 <i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;    abstract Order findOrder(BayesianNetwork bn, Node queryNode);
-<i class="no-highlight">7</i>&nbsp;}
+<b class="fc"><i class="no-highlight">6</i>&nbsp;public class MaxCardinality extends OrderAlgo{</b>
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;    @Override
+<i class="no-highlight">9</i>&nbsp;    public Order findOrder(BayesianNetwork bn, Node queryNode) {
+<b class="fc"><i class="no-highlight">10</i>&nbsp;        InducedGraph g = new InducedGraph(bn.getNodes());</b>
+<b class="fc"><i class="no-highlight">11</i>&nbsp;        ArrayList&lt;Node&gt; unmarked = new ArrayList&lt;&gt;(bn.getNodes());</b>
+<b class="fc"><i class="no-highlight">12</i>&nbsp;        ArrayList&lt;Node&gt; marked = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">13</i>&nbsp;        ArrayList&lt;Node&gt; order = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;        // mark the queried node
+<b class="fc"><i class="no-highlight">16</i>&nbsp;        order.add(queryNode);</b>
+<b class="fc"><i class="no-highlight">17</i>&nbsp;        unmarked.remove(queryNode);</b>
+<b class="fc"><i class="no-highlight">18</i>&nbsp;        marked.add(queryNode);</b>
+<i class="no-highlight">19</i>&nbsp;
+<b class="fc"><i class="no-highlight">20</i>&nbsp;        for (int i = 1; i &lt; bn.getNodes().size(); i++) {</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;            Node maxCardinalityNode = findMaxCardinalityNode(unmarked, marked, g);</b>
+<b class="fc"><i class="no-highlight">22</i>&nbsp;            order.add(maxCardinalityNode);</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;            unmarked.remove(maxCardinalityNode);</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;            marked.add(maxCardinalityNode);</b>
+<i class="no-highlight">25</i>&nbsp;        }
+<i class="no-highlight">26</i>&nbsp;
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        Order finalOrder = new Order();</b>
+<i class="no-highlight">28</i>&nbsp;        // create Order data structure in (reversed)
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        for (int i = order.size() - 1; i &gt;= 0; i--) {</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;            finalOrder.add(order.get(i));</b>
+<i class="no-highlight">31</i>&nbsp;        }
+<i class="no-highlight">32</i>&nbsp;
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        finalOrder.remove(queryNode);</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        return finalOrder;</b>
+<i class="no-highlight">35</i>&nbsp;    }
+<i class="no-highlight">36</i>&nbsp;
+<i class="no-highlight">37</i>&nbsp;    protected static Node findMaxCardinalityNode(ArrayList&lt;Node&gt; unmarked, ArrayList&lt;Node&gt; marked, InducedGraph g) {
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        Node maxCardinalityNode = null;</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        int maxCardinality = 0;</b>
+<i class="no-highlight">40</i>&nbsp;
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        for (Node node : unmarked) {</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;            int currCardinality = 0;</b>
+<i class="no-highlight">43</i>&nbsp;
+<b class="fc"><i class="no-highlight">44</i>&nbsp;            for (Node nbr : g.getGraph().get(node)) {</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;                if (marked.contains(nbr)) {</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;                    currCardinality++;</b>
+<i class="no-highlight">47</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">48</i>&nbsp;            }</b>
+<i class="no-highlight">49</i>&nbsp;
+<b class="fc"><i class="no-highlight">50</i>&nbsp;            if (currCardinality &gt; maxCardinality) {</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;                maxCardinality = currCardinality;</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;                maxCardinalityNode = node;</b>
+<i class="no-highlight">53</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        }</b>
+<i class="no-highlight">55</i>&nbsp;
+<b class="fc"><i class="no-highlight">56</i>&nbsp;        return maxCardinalityNode;</b>
+<i class="no-highlight">57</i>&nbsp;    }
+<i class="no-highlight">58</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -106,7 +157,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-03-24 08:45</div>
+    <div style="float:right;">generated on 2022-03-25 06:41</div>
 </div>
 </body>
 </html>
