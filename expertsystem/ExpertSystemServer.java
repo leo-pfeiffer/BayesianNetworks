@@ -27,7 +27,8 @@ public class ExpertSystemServer {
         HttpContext context = server.createContext("/");
         context.setHandler(ExpertSystemServer::handleRequest);
         server.start();
-        System.out.println("Listening on port 8080. Go to http://localhost:8080/...");
+        System.out.println("Listening on port " + port + "...");
+        System.out.println("Go to http://localhost:" + port + "/ in your browser.");
     }
 
     private static void handleRequest(HttpExchange exchange) throws IOException {
