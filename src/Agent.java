@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -125,25 +126,19 @@ public class Agent {
      * */
     protected Factor pointWiseProduct(Factor f1, Factor f2) {
 
-        // variables both in f1 and f2
-        Set<Node> v1 = SetUtils.intersection(f1.getNodeSet(), f2.getNodeSet());
-
-        // variables in f1 but not in f2
-        Set<Node> v2 = new HashSet<>(f1.getNodeSet());
-        v2.removeAll(f2.getNodeSet());
-
-        // variables in f2 but not in f1
-        Set<Node> v3 = new HashSet<>(f2.getNodeSet());
-        v3.removeAll(f1.getNodeSet());
-
         // create the raw resulting table
         Factor result = new Factor();
-        for (Node n : v1) result.addColumn(n);
-        for (Node n : v2) result.addColumn(n);
-        for (Node n : v3) result.addColumn(n);
 
-        Set<Node> leftSide = SetUtils.union(v1, v2);
-        Set<Node> rightSide = SetUtils.union(v1, v3);
+        Set<Node> leftSide = new HashSet<>(f1.getNodeSet());
+        Set<Node> rightSide = new HashSet<>(f2.getNodeSet());
+
+        // add nodes in sorted order (for reproducibility)
+        ArrayList<Node> allNodes = new ArrayList<>(SetUtils.union(leftSide, rightSide));
+        allNodes.sort(Comparator.comparing(Node::getLabel));
+
+        for (Node n : SetUtils.union(leftSide, rightSide)) {
+            result.addColumn(n);
+        }
 
         // list to be filled with the truth values of the new table
         List<Double> truthValues = new ArrayList<>(result.getNumRows());
