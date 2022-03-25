@@ -136,7 +136,7 @@ public class Agent {
         ArrayList<Node> allNodes = new ArrayList<>(SetUtils.union(leftSide, rightSide));
         allNodes.sort(Comparator.comparing(Node::getLabel));
 
-        for (Node n : SetUtils.union(leftSide, rightSide)) {
+        for (Node n : allNodes) {
             result.addColumn(n);
         }
 
