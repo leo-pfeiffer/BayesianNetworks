@@ -140,8 +140,8 @@ public class Agent {
             result.addColumn(n);
         }
 
-        // list to be filled with the truth values of the new table
-        List<Double> truthValues = new ArrayList<>(result.getNumRows());
+        // list to be filled with the probabilities of the new table
+        List<Double> probabilities = new ArrayList<>(result.getNumRows());
 
         // row by row over the new table
         for (int row = 0; row < result.getNumRows(); row++) {
@@ -163,13 +163,13 @@ public class Agent {
                 }
             }
 
-            // get the truth value of the row
-            double truthValue = f1.getProbabilitiesByRowKey(leftKey) * f2.getProbabilitiesByRowKey(rightKey);
-            truthValues.add(truthValue);
+            // get the probability of the row
+            double probability = f1.getProbabilitiesByRowKey(leftKey) * f2.getProbabilitiesByRowKey(rightKey);
+            probabilities.add(probability);
         }
 
         // fill the table with the truth values
-        result.setProbabilities(truthValues);
+        result.setProbabilities(probabilities);
 
         return result;
     }
