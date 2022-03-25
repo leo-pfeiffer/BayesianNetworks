@@ -8,6 +8,7 @@ import bayesiannetwork.Factor;
 import bayesiannetwork.FactorColumn;
 import bayesiannetwork.FactorRowKey;
 import bayesiannetwork.Node;
+import bayesiannetwork.Tracker;
 import utils.SetUtils;
 
 /**

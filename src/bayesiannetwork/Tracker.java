@@ -1,5 +1,6 @@
+package bayesiannetwork;
+
 import java.util.Collection;
-import bayesiannetwork.Factor;
 
 public class Tracker {
     // run time
