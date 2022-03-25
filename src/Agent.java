@@ -180,7 +180,7 @@ public class Agent {
     protected Factor marginalize(Factor f, String y) {
 
         // map the new row keys to the new truth values
-        HashMap<FactorRowKey, Double> newTruthValues = this.createTruthValuesForMarginalization(f, y);
+        HashMap<FactorRowKey, Double> newTruthValues = this.groupFactorByVariable(f, y);
 
         // create the new table
         Factor result = this.marginalizeCreateTable(f, y);
@@ -199,15 +199,15 @@ public class Agent {
      * Given the factor f and the variable y to marginalize,
      * group by the row keys of f (without column y) and sum the probabilities.
      * */
-    private HashMap<FactorRowKey, Double> createTruthValuesForMarginalization(Factor f, String y) {
+    private HashMap<FactorRowKey, Double> groupFactorByVariable(Factor f, String y) {
 
         Node yNode = f.getNodeFromColumns(y);
 
         // rows already explored to prevent double counting
         HashSet<FactorRowKey> explored = new HashSet<>(f.getNumRows());
 
-        // map the new row keys to the new truth values
-        HashMap<FactorRowKey, Double> newTruthValues = new HashMap<>(f.getNumRows()/2);
+        // map the new row keys to the new probabilities
+        HashMap<FactorRowKey, Double> newProbabilities = new HashMap<>(f.getNumRows()/2);
 
         // sum out the variable y
         for (int row = 0; row < f.getNumRows(); row++) {
@@ -224,22 +224,22 @@ public class Agent {
                 keys.add(key);
             }
 
-            // compute combined truth value of the keys
-            double truthValue = 0;
+            // compute combined probability of the keys
+            double probability = 0;
             for (FactorRowKey key : keys) {
-                truthValue += f.getProbabilitiesByRowKey(key);
+                probability += f.getProbabilitiesByRowKey(key);
             }
 
             // add the truth value to the new table
             FactorRowKey newRowKey = new FactorRowKey(rowKey);
             newRowKey.remove(y);
-            newTruthValues.put(newRowKey, truthValue);
+            newProbabilities.put(newRowKey, probability);
 
             // add to explored
             explored.addAll(keys);
         }
 
-        return newTruthValues;
+        return newProbabilities;
     }
 
     /**
