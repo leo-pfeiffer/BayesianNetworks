@@ -40,7 +40,7 @@ public class ExpertSystemServer {
     }
 
     private static void handleGetRequest(HttpExchange exchange) throws IOException {
-        File path = new File("www/index.html");
+        File path = new File("expertsystem/www/index.html");
 
         Headers h = exchange.getResponseHeaders();
         h.add("Content-Type", "text/html");
