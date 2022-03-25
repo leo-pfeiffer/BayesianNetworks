@@ -12,7 +12,8 @@ import bayesiannetwork.Tracker;
 import utils.SetUtils;
 
 /**
- * Class representing the Variable Elimination algorithm.
+ * Class representing an agent with the basic variable elimination
+ * algorithm (without evidence).
  * */
 public class Agent {
 

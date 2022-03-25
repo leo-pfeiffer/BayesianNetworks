@@ -1,5 +1,8 @@
 import bayesiannetwork.Node;
 
+/**
+ * An Evidence object stores evidence for a single node.
+ */
 public class Evidence {
     private final Node node;
     private final int value;

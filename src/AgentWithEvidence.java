@@ -8,6 +8,10 @@ import bayesiannetwork.FactorRowKey;
 import bayesiannetwork.Node;
 import utils.SetUtils;
 
+/**
+ * The AgentWithEvidence class is an agent that can be used to query a
+ * Bayesian network with evidence.
+ */
 public class AgentWithEvidence extends Agent {
 
     public AgentWithEvidence(BayesianNetwork network) {

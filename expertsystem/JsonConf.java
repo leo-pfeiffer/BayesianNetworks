@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.Node;
 
+/**
+ * Serializable object of program configurations.
+ */
 public class JsonConf implements Serializable {
 
     private final String queryNode;

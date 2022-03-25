@@ -7,6 +7,9 @@ import com.google.gson.GsonBuilder;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
+/**
+ * The ExperimentReaderWriter class is used to run experiments and write the results to a JSON file
+ */
 public class ExperimentReaderWriter {
 
     private static final String OUT_FOLDER = "evaluation/out/";

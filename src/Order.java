@@ -4,6 +4,10 @@ import java.util.Iterator;
 import java.util.List;
 import bayesiannetwork.Node;
 
+/**
+ * Data structure representing the elimination order of nodes in a bayesian network.
+ * Basically just a wrapper around an ArrayList.
+ * */
 public class Order implements Iterable<Node> {
     public final List<Node> order = new ArrayList<>();
 

@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.Node;
 
+/**
+ * Helper class that wraps the methods to parse the values passed through the command line.
+ * */
 public class Parser {
 
     public static int truthValueToInt(String value) {

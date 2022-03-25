@@ -3,6 +3,9 @@ import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.InducedGraph;
 import bayesiannetwork.Node;
 
+/**
+ * GreedyMinEdges is an implementation of the greedy minimum edges algorithm.
+ */
 public class GreedyMinEdges extends OrderAlgo {
 
     @Override

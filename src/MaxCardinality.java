@@ -3,6 +3,9 @@ import bayesiannetwork.BayesianNetwork;
 import bayesiannetwork.InducedGraph;
 import bayesiannetwork.Node;
 
+/**
+ * Maximum Cardinality algorithm for finding an elimination order.
+ * */
 public class MaxCardinality extends OrderAlgo{
 
     @Override
@@ -34,6 +37,14 @@ public class MaxCardinality extends OrderAlgo{
         return finalOrder;
     }
 
+    /**
+     * Find the node in the unmarked list with the highest cardinality in the induced graph
+     *
+     * @param unmarked an ArrayList of nodes that have not yet been marked
+     * @param marked a list of nodes that have already been added to the induced graph
+     * @param g the graph
+     * @return The node with the highest cardinality.
+     */
     protected static Node findMaxCardinalityNode(ArrayList<Node> unmarked, ArrayList<Node> marked, InducedGraph g) {
         Node maxCardinalityNode = null;
         int maxCardinality = 0;

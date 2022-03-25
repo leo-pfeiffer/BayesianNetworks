@@ -2,6 +2,9 @@ package bayesiannetwork;
 
 import java.util.Collection;
 
+/**
+ * This class is used to track metrics of the program.
+ */
 public class Tracker {
     // run time
     private long runTime = 0;
@@ -30,9 +33,13 @@ public class Tracker {
         return maxFactorSize;
     }
 
+    /**
+     * Get the maximum number of rows of the factors.
+     *
+     * @param factors the factors to track
+     */
     public void trackMaxFactorSize(Collection<Factor> factors) {
         for (Factor factor : factors) {
-            // int size = factor.getNumRows() * factor.getColumns().size();
             int size = factor.getColumns().size();
             if (size > maxFactorSize) {
                 maxFactorSize = size;
