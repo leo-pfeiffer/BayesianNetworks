@@ -85,15 +85,6 @@ public class A3main {
                 printResult(result);
             }
 
-            // run the expert system server
-            case "P5": {
-                try {
-                    ExpertSystemServer.main(new String[]{});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
             default:
                 break;
         }
